@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Młodość Lily i Jamesa</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="fragment_chapters">Rozdziały</string>
+    <string name="fragment_favorites">Ulubione</string>
+    <string name="fragment_about_blog">O Blogu</string>
+    <string name="fragment_settings">Ustawienia</string>
+    <string name="check_internet_connection">Sprawdź połączenie z internetem.</string>
+</resources>

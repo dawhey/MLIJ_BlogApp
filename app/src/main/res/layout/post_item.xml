@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:id="@+id/chapter_card"
+        app:cardBackgroundColor="@color/brightBackground"
+        app:cardElevation="4dp"
+        android:layout_marginEnd="4dp"
+        app:cardCornerRadius="4dp"
+        android:layout_marginBottom="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rozdział 42"
+                android:layout_marginTop="@dimen/card_children_padding"
+                android:layout_marginStart="@dimen/card_children_padding"
+                android:layout_marginEnd="@dimen/card_children_padding"
+                android:layout_marginBottom="8dp"
+                android:textSize="18sp"
+                android:textColor="@color/primaryViolet"
+                android:textStyle="bold"
+                android:id="@+id/chapter_number_view" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cudne chwile. blalbablal dwla l d"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:id="@+id/chapter_title_view"
+                android:layout_toStartOf="@+id/chapter_favourites_icon"
+                android:layout_alignParentStart="true"
+                android:gravity="start"
+                android:paddingEnd="@dimen/default_app_padding"
+                android:layout_marginBottom="@dimen/card_children_padding"
+                android:layout_below="@+id/chapter_number_view"
+                android:layout_marginStart="@dimen/card_children_padding" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_favorite_black_24dp"
+                android:layout_margin="@dimen/card_children_padding"
+                android:tint="@color/grayBright"
+                android:id="@+id/chapter_favourites_icon"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignBottom="@id/chapter_title_view"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

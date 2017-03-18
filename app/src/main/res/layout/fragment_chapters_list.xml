@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_refresh_chapters_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/chapters_list_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/recycler_view_padding"
+                android:paddingBottom="@dimen/recycler_view_padding"
+                android:paddingStart="@dimen/recycler_view_padding"
+                android:paddingEnd="@dimen/recycler_view_padding"
+                android:clipToPadding="false"/>
+
+
+            <RelativeLayout
+                android:id="@+id/error_chapters_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_marginEnd="@dimen/default_app_padding"
+                    android:layout_marginStart="@dimen/default_app_padding"
+                    android:layout_marginTop="@dimen/default_app_padding"
+                    android:gravity="center"
+                    android:textColor="@color/textDefault"
+                    android:text="@string/check_internet_connection"
+                    android:id="@+id/error_message_view" />
+
+                <View
+                    android:layout_width="150dp"
+                    android:id="@+id/error_divider"
+                    android:layout_marginTop="@dimen/default_app_padding"
+                    android:layout_height="2dp"
+                    android:background="@color/colorAccent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@id/error_message_view" />
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@id/error_divider"
+                    android:src="@drawable/error_image"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+</RelativeLayout>
