@@ -1,13 +1,18 @@
 package com.dawhey.mlij_blogapp.Adapters;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
 import java.util.List;
@@ -17,11 +22,13 @@ import java.util.List;
  */
 public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ViewHolder> {
 
-
-
     private List<Chapter> posts;
     private OnChapterClickListener listener;
+    private Context context;
+    private List<Chapter> favorites;
 
+    private ColorStateList regularTint;
+    private ColorStateList favoriteTint;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView chapterTitleView, chapterNumberView;
@@ -33,6 +40,15 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             chapterNumberView = (TextView) v.findViewById(R.id.chapter_number_view);
             favoriteIconView = (ImageView) v.findViewById(R.id.chapter_favourites_icon);
         }
+    }
+
+    public ChapterListAdapter(Context context) {
+        this.context = context;
+        PreferencesManager preferencesManager = PreferencesManager.getInstance(context);
+        favorites = preferencesManager.getFavoriteChapters();
+
+        regularTint = ColorStateList.valueOf(context.getResources().getColor(R.color.grayBright));
+        favoriteTint = ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent));
     }
 
     public void setOnChapterClickListener(OnChapterClickListener fragment) {
@@ -63,6 +79,12 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 listener.onChapterItemClick(posts.get(position), holder);
             }
         });
+
+        if (favorites.contains(post)) {
+            holder.favoriteIconView.setImageTintList(favoriteTint);
+        } else {
+            holder.favoriteIconView.setImageTintList(regularTint);
+        }
     }
 
     @Override

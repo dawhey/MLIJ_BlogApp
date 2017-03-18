@@ -1,5 +1,7 @@
 package com.dawhey.mlij_blogapp.Fragments;
 
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -61,18 +63,30 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chapter, container, false);
+
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(chapter.getChapterHeaderFormatted());
+        initViews(root);
+        initListeners();
+        setFavoriteButton();
+
+        return root;
+    }
+
+    private void initViews(View root) {
         titleView = (TextView) root.findViewById(R.id.chapter_title_view);
         contentView = (TextView) root.findViewById(R.id.chapter_content_view);
         dividerLine = root.findViewById(R.id.title_divider);
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
         errorView = (RelativeLayout) root.findViewById(R.id.error_chapter_view);
         scrollView = (ScrollView) root.findViewById(R.id.text_scroll_view);
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
         refreshButton = (Button) root.findViewById(R.id.error_refresh_button);
         progressBar = (ProgressBar) root.findViewById(R.id.chapter_progressbar);
         favoriteButton = (FloatingActionButton) root.findViewById(R.id.favorite_button);
         titleView.setText(chapter.getTitleFormatted());
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(chapter.getChapterHeaderFormatted());
+    }
+
+    private void initListeners() {
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
 
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,11 +98,19 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(favoriteButton, "Dodano rozdział do ulubionych!", Snackbar.LENGTH_SHORT).show();
+                PreferencesManager manager = PreferencesManager.getInstance(getContext());
+                favoriteButton.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
+                if (manager.isInFavorites(chapter)) {
+                    manager.removeFromFavorites(chapter);
+                    favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.textDefault)));
+                    Snackbar.make(favoriteButton, R.string.deleted_from_favorites_message, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    manager.addToFavorites(chapter);
+                    favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                    Snackbar.make(favoriteButton, R.string.added_to_favorites_message, Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
-
-        return root;
     }
 
     @Override
@@ -140,6 +162,14 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             contentView.clearAnimation();
             contentView.startAnimation(a);
             favoriteButton.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
+        }
+    }
+
+    private void setFavoriteButton() {
+        if (PreferencesManager.getInstance(getContext()).isInFavorites(chapter)) {
+            favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+        } else {
+            favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.textDefault)));
         }
     }
 

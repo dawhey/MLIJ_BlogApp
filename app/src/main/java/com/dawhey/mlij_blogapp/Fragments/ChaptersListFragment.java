@@ -53,7 +53,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
         chaptersListView.setLayoutManager(new LinearLayoutManager(getContext()));
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.fragment_chapters));
 
-        chapterListAdapter = new ChapterListAdapter();
+        chapterListAdapter = new ChapterListAdapter(getContext());
         chapterListAdapter.setOnChapterClickListener(this);
 
         return root;

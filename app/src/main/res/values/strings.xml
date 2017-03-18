@@ -12,4 +12,6 @@
     <string name="check_internet_connection">Sprawdź połączenie z internetem.</string>
     <string name="shared_transition_title_tag">chapterTitle</string>
     <string name="refresh">Odśwież</string>
+    <string name="deleted_from_favorites_message">Usunięto rozdział z ulubionych</string>
+    <string name="added_to_favorites_message">Dodano rozdział do ulubionych</string>
 </resources>

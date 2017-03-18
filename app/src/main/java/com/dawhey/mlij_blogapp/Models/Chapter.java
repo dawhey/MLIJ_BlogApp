@@ -83,4 +83,13 @@ public class Chapter {
     public void setContent(String content) {
         this.content = content;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof Chapter) {
+            return this.id.equals(((Chapter) obj).id);
+        } else {
+            return false;
+        }
+    }
 }
