@@ -81,7 +81,9 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                     posts = response.body();
                     chapterListAdapter.setPosts(posts.getChapters());
                     chaptersListView.setAdapter(chapterListAdapter);
-                    chaptersListView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
+                    if (getContext() != null) {
+                        chaptersListView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
+                    }
                 }
             }
 
@@ -90,7 +92,9 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                 swipeRefreshView.setRefreshing(false);
                 if (posts == null) {
                     errorView.setVisibility(View.VISIBLE);
-                    errorView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
+                    if (getContext() != null) {
+                        errorView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
+                    }
                 }
                 Log.e(TAG, t.getMessage());
             }
