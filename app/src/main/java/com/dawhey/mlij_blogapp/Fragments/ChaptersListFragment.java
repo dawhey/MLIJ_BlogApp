@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,11 @@ import android.widget.RelativeLayout;
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
+import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
+import com.dawhey.mlij_blogapp.Models.Item;
 import com.dawhey.mlij_blogapp.Models.Posts;
 import com.dawhey.mlij_blogapp.R;
+import com.dawhey.mlij_blogapp.Transitions.DetailsTransition;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,10 +31,11 @@ import retrofit2.Response;
  * Created by dawhey on 17.03.17.
  */
 
-public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ChapterListAdapter.OnChapterClickListener {
 
     private static final String TAG = "ChaptersListFragment";
 
+    private ChapterListAdapter chapterListAdapter;
     private RecyclerView chaptersListView;
     private SwipeRefreshLayout swipeRefreshView;
     private RelativeLayout errorView;
@@ -46,8 +51,10 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
         errorView = (RelativeLayout) root.findViewById(R.id.error_chapters_view);
         chaptersListView = (RecyclerView) root.findViewById(R.id.chapters_list_view);
         chaptersListView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.fragment_chapters));
+
+        chapterListAdapter = new ChapterListAdapter();
+        chapterListAdapter.setOnChapterClickListener(this);
 
         return root;
     }
@@ -59,7 +66,8 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
             downloadChaptersList();
             swipeRefreshView.setRefreshing(true);
         } else {
-            chaptersListView.setAdapter(new ChapterListAdapter(posts.getItems()));
+            chapterListAdapter.setPosts(posts.getItems());
+            chaptersListView.setAdapter(chapterListAdapter);
         }
     }
 
@@ -71,7 +79,8 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                 swipeRefreshView.setRefreshing(false);
                 if (response != null) {
                     posts = response.body();
-                    chaptersListView.setAdapter(new ChapterListAdapter(posts.getItems()));
+                    chapterListAdapter.setPosts(posts.getItems());
+                    chaptersListView.setAdapter(chapterListAdapter);
                 }
             }
 
@@ -91,5 +100,24 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
     public void onRefresh() {
         downloadChaptersList();
         errorView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onChapterItemClick(Item clickedItem, ChapterListAdapter.ViewHolder holder) {
+        PreferencesManager.getInstance(getContext()).setLastChapter(clickedItem);
+
+        ChapterFragment chapterFragment = new ChapterFragment();
+
+        chapterFragment.setSharedElementEnterTransition(new DetailsTransition());
+        chapterFragment.setEnterTransition(new Fade());
+        setExitTransition(new Fade());
+        chapterFragment.setSharedElementReturnTransition(new DetailsTransition());
+
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(holder.chapterTitleView, getString(R.string.shared_transition_title_tag))
+                .replace(R.id.content_main, chapterFragment, MainActivity.TAG_FRAGMENT_TO_RETAIN)
+                .addToBackStack(TAG)
+                .commit();
     }
 }

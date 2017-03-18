@@ -20,7 +20,7 @@ import com.dawhey.mlij_blogapp.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG_FRAGMENT_TO_RETAIN = "RetainFragment";
+    public static final String TAG_FRAGMENT_TO_RETAIN = "RetainFragment";
     private Toolbar toolbar;
 
     @Override

@@ -54,4 +54,22 @@ public class Item {
     public String getFormattedPublishDate() {
         return published.split("T")[0];
     }
+
+    public String getTitleFormatted() {
+        String[] titles = title.split(": ");
+        if (titles.length >= 2) {
+            return titles[1];
+        } else {
+            return title;
+        }
+    }
+
+    public String getChapterHeaderFormatted() {
+        String[] titles = title.split(": ");
+        if (titles.length >= 2) {
+            return titles[0];
+        } else {
+            return title;
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.dawhey.mlij_blogapp.Adapters;
 
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +17,17 @@ import java.util.List;
  */
 public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ViewHolder> {
 
+
+
     private List<Item> posts;
+    private OnChapterClickListener listener;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView chapterTitleView, chapterNumberView;
         public ImageView favoriteIconView;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             chapterTitleView = (TextView) v.findViewById(R.id.chapter_title_view);
             chapterNumberView = (TextView) v.findViewById(R.id.chapter_number_view);
@@ -31,37 +35,42 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         }
     }
 
-    public ChapterListAdapter(List<Item> items) {
-        posts = items;
+    public void setOnChapterClickListener(OnChapterClickListener fragment) {
+        listener = fragment;
+    }
+
+    public void setPosts(List<Item> posts) {
+        this.posts = posts;
     }
 
     @Override
     public ChapterListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Item post = posts.get(position);
-        String[] titles = post.getTitle().split(": ");
+        holder.chapterTitleView.setText(post.getTitleFormatted());
+        holder.chapterNumberView.setText(post.getChapterHeaderFormatted());
 
-        if (titles.length >= 2) {
-            holder.chapterTitleView.setText(titles[1]);
-            holder.chapterNumberView.setText(titles[0]);
-        } else {
-            holder.chapterTitleView.setText(post.getTitle());
-            holder.chapterNumberView.setText("");
-        }
+        ViewCompat.setTransitionName(holder.chapterTitleView, String.valueOf(position) + "_chapterTitle");
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onChapterItemClick(posts.get(position), holder);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    public interface OnChapterClickListener {
+        void onChapterItemClick(Item chapter, ViewHolder holder);
     }
 }

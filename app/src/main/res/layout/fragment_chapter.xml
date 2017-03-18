@@ -3,9 +3,25 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Blabla"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_app_padding"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:maxLines="2"
+        android:textColor="@color/primaryViolet"
+        android:text="W ciemności ruczaju"
+        android:transitionName="@string/shared_transition_title_tag"
         android:id="@+id/chapter_title_view"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:id="@+id/title_divider"
+        android:layout_marginBottom="@dimen/default_app_padding"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_below="@id/chapter_title_view"
+        android:background="@color/primaryViolet"/>
 
 </RelativeLayout>

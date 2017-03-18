@@ -9,6 +9,7 @@
     <android.support.v7.widget.CardView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:foreground="?attr/selectableItemBackground"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:id="@+id/chapter_card"
@@ -44,9 +45,9 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:id="@+id/chapter_title_view"
-                android:layout_toStartOf="@+id/chapter_favourites_icon"
                 android:layout_alignParentStart="true"
                 android:gravity="start"
+                android:layout_marginEnd="@dimen/default_app_padding"
                 android:paddingEnd="@dimen/default_app_padding"
                 android:layout_marginBottom="@dimen/card_children_padding"
                 android:layout_below="@+id/chapter_number_view"
