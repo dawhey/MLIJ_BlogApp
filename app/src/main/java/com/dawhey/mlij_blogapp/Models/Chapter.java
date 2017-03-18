@@ -4,11 +4,14 @@ package com.dawhey.mlij_blogapp.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Item {
+public class Chapter {
 
     @SerializedName("id")
     @Expose
     private String id;
+    @SerializedName("content")
+    @Expose
+    private String content;
     @SerializedName("published")
     @Expose
     private String published;
@@ -71,5 +74,13 @@ public class Item {
         } else {
             return title;
         }
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

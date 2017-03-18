@@ -1,27 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/text_scroll_view"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_app_padding"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:maxLines="2"
+                android:textColor="@color/primaryViolet"
+                android:text="W ciemności ruczaju"
+                android:transitionName="@string/shared_transition_title_tag"
+                android:id="@+id/chapter_title_view"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:id="@+id/title_divider"
+                android:layout_marginBottom="@dimen/default_app_padding"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_below="@id/chapter_title_view"
+                android:background="@color/primaryViolet"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title_divider">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="24dp"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:paddingTop="@dimen/default_app_padding"
+                        android:textColor="@color/textDarker"
+                        android:textSize="18sp"
+                        android:id="@+id/chapter_content_view"
+                        android:visibility="gone" />
+                </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/favorite_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_app_padding"
-        android:textSize="22sp"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:maxLines="2"
-        android:textColor="@color/primaryViolet"
-        android:text="W ciemności ruczaju"
-        android:transitionName="@string/shared_transition_title_tag"
-        android:id="@+id/chapter_title_view"/>
-    <View
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:layout_alignParentEnd="true"
+        app:fabSize="normal"
+        android:visibility="gone"
+        app:pressedTranslationZ="4dp"
+        android:src="@drawable/ic_favorite_white"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <RelativeLayout
+        android:id="@+id/error_chapter_view"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:id="@+id/title_divider"
-        android:layout_marginBottom="@dimen/default_app_padding"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_below="@id/chapter_title_view"
-        android:background="@color/primaryViolet"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="@color/textDefault"
+            android:text="@string/check_internet_connection"
+            android:id="@+id/error_message_view"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_app_padding"
+            android:text="@string/refresh"
+            android:id="@+id/error_refresh_button"
+            android:layout_below="@id/error_message_view"
+            android:typeface="normal"
+            android:layout_centerHorizontal="true"
+            android:elevation="0dp" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chapter_progressbar"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+
 
 </RelativeLayout>

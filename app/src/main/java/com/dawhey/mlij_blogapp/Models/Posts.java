@@ -10,14 +10,14 @@ public class Posts {
 
     @SerializedName("items")
     @Expose
-    private List<Item> items = null;
+    private List<Chapter> chapters = null;
 
-    public List<Item> getItems() {
-        return items;
+    public List<Chapter> getChapters() {
+        return chapters;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
     }
 
 }

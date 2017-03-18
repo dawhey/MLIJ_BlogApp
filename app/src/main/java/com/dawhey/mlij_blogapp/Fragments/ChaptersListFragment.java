@@ -18,7 +18,7 @@ import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
-import com.dawhey.mlij_blogapp.Models.Item;
+import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 import com.dawhey.mlij_blogapp.R;
 import com.dawhey.mlij_blogapp.Transitions.DetailsTransition;
@@ -66,7 +66,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
             downloadChaptersList();
             swipeRefreshView.setRefreshing(true);
         } else {
-            chapterListAdapter.setPosts(posts.getItems());
+            chapterListAdapter.setPosts(posts.getChapters());
             chaptersListView.setAdapter(chapterListAdapter);
         }
     }
@@ -79,7 +79,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                 swipeRefreshView.setRefreshing(false);
                 if (response != null) {
                     posts = response.body();
-                    chapterListAdapter.setPosts(posts.getItems());
+                    chapterListAdapter.setPosts(posts.getChapters());
                     chaptersListView.setAdapter(chapterListAdapter);
                 }
             }
@@ -89,7 +89,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                 swipeRefreshView.setRefreshing(false);
                 if (posts == null) {
                     errorView.setVisibility(View.VISIBLE);
-                    errorView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
+                    errorView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
                 }
                 Log.e(TAG, t.getMessage());
             }
@@ -103,8 +103,8 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
     }
 
     @Override
-    public void onChapterItemClick(Item clickedItem, ChapterListAdapter.ViewHolder holder) {
-        PreferencesManager.getInstance(getContext()).setLastChapter(clickedItem);
+    public void onChapterItemClick(Chapter clickedChapter, ChapterListAdapter.ViewHolder holder) {
+        PreferencesManager.getInstance(getContext()).setLastChapter(clickedChapter);
 
         ChapterFragment chapterFragment = new ChapterFragment();
 

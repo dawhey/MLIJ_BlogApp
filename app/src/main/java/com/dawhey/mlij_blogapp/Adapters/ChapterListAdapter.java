@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dawhey.mlij_blogapp.Models.Item;
+import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
 
 
-    private List<Item> posts;
+    private List<Chapter> posts;
     private OnChapterClickListener listener;
 
 
@@ -39,7 +39,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         listener = fragment;
     }
 
-    public void setPosts(List<Item> posts) {
+    public void setPosts(List<Chapter> posts) {
         this.posts = posts;
     }
 
@@ -52,7 +52,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Item post = posts.get(position);
+        Chapter post = posts.get(position);
         holder.chapterTitleView.setText(post.getTitleFormatted());
         holder.chapterNumberView.setText(post.getChapterHeaderFormatted());
 
@@ -71,6 +71,6 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     public interface OnChapterClickListener {
-        void onChapterItemClick(Item chapter, ViewHolder holder);
+        void onChapterItemClick(Chapter chapter, ViewHolder holder);
     }
 }

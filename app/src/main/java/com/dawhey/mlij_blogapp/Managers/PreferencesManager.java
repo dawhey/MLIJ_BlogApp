@@ -3,7 +3,7 @@ package com.dawhey.mlij_blogapp.Managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.dawhey.mlij_blogapp.Models.Item;
+import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.google.gson.Gson;
 
 public class PreferencesManager {
@@ -26,15 +26,15 @@ public class PreferencesManager {
         return instance;
     }
 
-    public void setLastChapter(Item chapter) {
+    public void setLastChapter(Chapter chapter) {
         String json = new Gson().toJson(chapter);
         preferences.edit().putString(LAST_CHAPTER_KEY, json).commit();
     }
 
-    public Item getLastChapter() {
+    public Chapter getLastChapter() {
         String json = preferences.getString(LAST_CHAPTER_KEY, null);
         if (json != null) {
-            return new Gson().fromJson(json, Item.class);
+            return new Gson().fromJson(json, Chapter.class);
         } else {
             return null;
         }

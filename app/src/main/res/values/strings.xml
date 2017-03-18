@@ -11,4 +11,5 @@
     <string name="fragment_settings">Ustawienia</string>
     <string name="check_internet_connection">Sprawdź połączenie z internetem.</string>
     <string name="shared_transition_title_tag">chapterTitle</string>
+    <string name="refresh">Odśwież</string>
 </resources>
