@@ -3,6 +3,7 @@ package com.dawhey.mlij_blogapp.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
@@ -32,7 +33,7 @@ import retrofit2.Response;
  * Created by dawhey on 18.03.17.
  */
 
-public class ChapterFragment extends Fragment{
+public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScrollChangedListener{
 
     private static final String TAG = "ChapterFragment";
 
@@ -66,6 +67,7 @@ public class ChapterFragment extends Fragment{
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
         errorView = (RelativeLayout) root.findViewById(R.id.error_chapter_view);
         scrollView = (ScrollView) root.findViewById(R.id.text_scroll_view);
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
         refreshButton = (Button) root.findViewById(R.id.error_refresh_button);
         progressBar = (ProgressBar) root.findViewById(R.id.chapter_progressbar);
         favoriteButton = (FloatingActionButton) root.findViewById(R.id.favorite_button);
@@ -79,16 +81,10 @@ public class ChapterFragment extends Fragment{
             }
         });
 
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onScrollChanged() {
-                int newScrollPosition = scrollView.getScrollY();
-                if (newScrollPosition > 0 && newScrollPosition > scrollPosition) {
-                    favoriteButton.hide();
-                } else {
-                    favoriteButton.show();
-                }
-                scrollPosition = newScrollPosition;
+            public void onClick(View view) {
+                Snackbar.make(favoriteButton, "Dodano rozdział do ulubionych!", Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -151,5 +147,16 @@ public class ChapterFragment extends Fragment{
         progressBar.setVisibility(View.GONE);
         contentView.setVisibility(View.GONE);
         errorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onScrollChanged() {
+        int newScrollPosition = scrollView.getScrollY();
+        if (newScrollPosition > 0 && newScrollPosition > scrollPosition) {
+            favoriteButton.hide();
+        } else {
+            favoriteButton.show();
+        }
+        scrollPosition = newScrollPosition;
     }
 }

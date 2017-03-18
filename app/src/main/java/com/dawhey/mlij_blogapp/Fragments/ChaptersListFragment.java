@@ -81,6 +81,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                     posts = response.body();
                     chapterListAdapter.setPosts(posts.getChapters());
                     chaptersListView.setAdapter(chapterListAdapter);
+                    chaptersListView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
                 }
             }
 
