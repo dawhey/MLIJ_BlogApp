@@ -13,7 +13,7 @@
             android:resource="@drawable/ic_hogwarts" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/primaryViolet" />
+            android:resource="@color/launcherBlue" />
         <service
             android:name=".Services.MessagingService">
             <intent-filter>

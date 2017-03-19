@@ -1,11 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <TextView
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:id="@+id/content_about">
+
+    <RelativeLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/fragment_about_blog"/>
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/logo_about"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/logo_about"
+            android:layout_marginTop="@dimen/default_app_padding" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:id="@+id/contact_label"
+            android:layout_marginBottom="@dimen/default_app_padding"
+            android:layout_below="@id/logo_about"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+            android:textColor="@color/primaryViolet"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/about_refs"
+            android:gravity="center"
+            android:layout_below="@id/contact_label">
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_app_padding"
+                android:id="@+id/website_ref">
+
+                <ImageView
+                    android:layout_width="@dimen/about_icon_size"
+                    android:layout_height="@dimen/about_icon_size"
+                    android:id="@+id/website_icon"
+                    android:clickable="true"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_action_website"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/website_icon"
+                    android:maxLines="2"
+                    android:textSize="@dimen/about_icon_label_size"
+                    android:gravity="center"
+                    android:textColor="@color/textDefault"
+                    android:text="@string/website_ref"
+                    android:layout_alignEnd="@+id/website_icon" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/email_ref"
+                android:layout_margin="@dimen/default_app_padding"
+                android:layout_toEndOf="@id/website_ref">
+
+                <ImageView
+                    android:layout_width="@dimen/about_icon_size"
+                    android:layout_height="@dimen/about_icon_size"
+                    android:id="@+id/email_icon"
+                    android:clickable="true"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_action_email"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/email_icon"
+                    android:maxLines="2"
+                    android:minLines="2"
+                    android:textSize="@dimen/about_icon_label_size"
+                    android:gravity="center"
+                    android:textColor="@color/textDefault"
+                    android:text="@string/email_ref"
+                    android:layout_alignEnd="@+id/email_icon"
+                    android:layout_alignParentStart="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_app_padding"
+                android:id="@+id/facebook_ref"
+                android:layout_toEndOf="@id/email_ref">
+
+                <ImageView
+                    android:layout_width="@dimen/about_icon_size"
+                    android:layout_height="@dimen/about_icon_size"
+                    android:clickable="true"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:id="@+id/facebook_icon"
+                    android:src="@drawable/ic_action_facebook"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/facebook_icon"
+                    android:maxLines="2"
+                    android:minLines="2"
+                    android:textSize="@dimen/about_icon_label_size"
+                    android:textColor="@color/textDefault"
+                    android:gravity="center"
+                    android:text="@string/facebook_ref"
+                    android:layout_alignEnd="@+id/facebook_icon"
+                    android:layout_alignParentStart="true" />
+
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/fragment_about_blog"
+            android:id="@+id/about_label"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:textColor="@color/primaryViolet"
+            android:textStyle="bold|italic"
+            android:layout_below="@id/about_refs"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/about_desc"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@color/textDefault"
+            android:text="@string/about_desc"
+            android:layout_marginLeft="@dimen/default_app_padding"
+            android:layout_marginRight="@dimen/default_app_padding"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/default_app_padding"
+            android:layout_below="@+id/about_label"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+</ScrollView>
