@@ -102,7 +102,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void openFragment(Fragment fragment) {
         if (fragment != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (fragmentManager.getBackStackEntryCount() > 0) {
+                fragmentManager.popBackStack();
+            }
+
+            FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.content_main, fragment, TAG_FRAGMENT_TO_RETAIN);
             ft.commit();
         }

@@ -138,7 +138,7 @@
             android:text="@string/fragment_about_blog"
             android:id="@+id/about_label"
             android:layout_centerHorizontal="true"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textColor="@color/primaryViolet"
             android:textStyle="bold|italic"
             android:layout_below="@id/about_refs"/>

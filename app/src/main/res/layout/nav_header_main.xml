@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/nav_bar_icon"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/hogwarts"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/nav_header_bg"
+        android:scaleType="fitXY" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_overlay"/>
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:gravity="left"
         android:id="@+id/nav_bar_title"
         android:textSize="20sp"
-        android:typeface="serif"
-        android:layout_toEndOf="@id/nav_bar_icon"
-        android:text="@string/app_name"
+        android:layout_alignParentStart="true"
+        android:elevation="4dp"
+        android:layout_margin="24dp"
+        android:text="Młodość Lily i Jamesa"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
