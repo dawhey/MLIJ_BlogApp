@@ -1,5 +1,6 @@
 package com.dawhey.mlij_blogapp.Activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -14,10 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.dawhey.mlij_blogapp.Fragments.AboutBlogFragment;
+import com.dawhey.mlij_blogapp.Fragments.ChapterFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChaptersListFragment;
 import com.dawhey.mlij_blogapp.Fragments.FavoritesFragment;
 import com.dawhey.mlij_blogapp.R;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -74,20 +78,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.setChecked(true);
         int id = item.getItemId();
 
+        Fragment fragment = null;
         if (id == R.id.nav_chapters) {
-            new Handler().postDelayed(new OpenFragmentRunnable(), 300);
-        } else {
-            Fragment fragment = null;
-            if (id == R.id.nav_favourites) {
-                fragment = new FavoritesFragment();
-            } else if (id == R.id.nav_about_blog) {
-                fragment = new AboutBlogFragment();
-            } else if (id == R.id.nav_settings) {
-                //TODO: Add settings fragment
-            }
-            openFragment(fragment);
+            fragment = new ChaptersListFragment();
+        } else if (id == R.id.nav_favourites) {
+            fragment = new FavoritesFragment();
+        } else if (id == R.id.nav_about_blog) {
+            fragment = new AboutBlogFragment();
+        } else if (id == R.id.nav_settings) {
+            //TODO: Add settings fragment
         }
 
+        new Handler().postDelayed(new OpenFragmentRunnable(fragment), OpenFragmentRunnable.DELAY);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -106,16 +108,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     /**
      * Class used to avoid Navigation Drawer closing stutter
-     * when ChaptersListFragment is selected
+     * when new Fragment is selected
      */
     private class OpenFragmentRunnable implements Runnable {
 
+        private static final int DELAY = 300;
+        private Fragment fragment;
+
+        OpenFragmentRunnable(Fragment fragment) {
+            this.fragment = fragment;
+        }
+
         @Override
         public void run() {
-            openFragment(new ChaptersListFragment());
+            openFragment(fragment);
         }
     }
 
