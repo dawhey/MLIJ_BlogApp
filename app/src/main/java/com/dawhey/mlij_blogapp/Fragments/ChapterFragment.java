@@ -41,6 +41,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
 
     private int scrollPosition = 0;
 
+    private boolean openedFromBookmark;
     private Chapter chapter;
 
     private OnChapterDownloadedListener listener;
@@ -48,7 +49,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     private TextView titleView;
     private RelativeLayout errorView;
     private ScrollView scrollView;
-    private Button refreshButton;
+    private FloatingActionButton refreshButton;
     private ProgressBar progressBar;
     private TextView contentView;
     private FloatingActionButton favoriteButton;
@@ -57,7 +58,6 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         chapter = PreferencesManager.getInstance(getContext()).getLastChapter();
-        chapter.getId();
     }
 
     @Nullable
@@ -80,7 +80,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
         errorView = (RelativeLayout) root.findViewById(R.id.error_chapter_view);
         scrollView = (ScrollView) root.findViewById(R.id.text_scroll_view);
-        refreshButton = (Button) root.findViewById(R.id.error_refresh_button);
+        refreshButton = (FloatingActionButton) root.findViewById(R.id.error_refresh_button);
         progressBar = (ProgressBar) root.findViewById(R.id.chapter_progressbar);
         favoriteButton = (FloatingActionButton) root.findViewById(R.id.favorite_button);
         titleView.setText(chapter.getTitleFormatted());
@@ -117,6 +117,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     @Override
     public void onResume() {
         super.onResume();
+
         if (chapter.getContent() == null) {
             downloadChapterContent();
         } else {
@@ -133,6 +134,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             public void onResponse(Call<Chapter> call, Response<Chapter> response) {
                 chapter = response.body();
                 listener.onChapterDownloaded(chapter);
+                PreferencesManager.getInstance(getContext()).setLastChapter(chapter);
                 contentView.setText(Html.fromHtml(chapter.getContent()));
                 showContentView();
             }
@@ -157,6 +159,13 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         contentView.setVisibility(View.VISIBLE);
         favoriteButton.show();
         animateContent();
+
+        if (openedFromBookmark) {
+            if (getView() != null) {
+                Snackbar.make(favoriteButton, R.string.last_read_chapter_label, Snackbar.LENGTH_SHORT).show();
+                openedFromBookmark = false;
+            }
+        }
     }
 
     private void animateContent()
@@ -201,5 +210,13 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
 
     public interface OnChapterDownloadedListener {
         void onChapterDownloaded(Chapter chapter);
+    }
+
+    public boolean isOpenedFromBookmark() {
+        return openedFromBookmark;
+    }
+
+    public void setOpenedFromBookmark(boolean openedFromBookmark) {
+        this.openedFromBookmark = openedFromBookmark;
     }
 }

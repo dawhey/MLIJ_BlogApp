@@ -15,4 +15,7 @@
     <string name="deleted_from_favorites_message">Usunięto rozdział z ulubionych.</string>
     <string name="added_to_favorites_message">Dodano rozdział do ulubionych.</string>
     <string name="no_favs_message">Brak ulubionych.</string>
+    <string name="last_read">Ostatnio czytane.</string>
+    <string name="no_last_read_chapter">Brak ostatnio czytanego rozdziału.</string>
+    <string name="last_read_chapter_label">Ostatnio czytany rozdział.</string>
 </resources>

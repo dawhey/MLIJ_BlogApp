@@ -82,7 +82,7 @@
         android:id="@+id/error_chapter_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:gravity="center">
 
         <TextView
@@ -90,19 +90,25 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:gravity="center"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
             android:textColor="@color/textDefault"
             android:text="@string/check_internet_connection"
             android:id="@+id/error_message_view"
             android:layout_centerHorizontal="true" />
 
-        <Button
+        <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_app_padding"
             android:text="@string/refresh"
+            android:clickable="true"
+            app:backgroundTint="@color/primaryViolet"
+            android:tint="@color/cardview_light_background"
+            app:fabSize="normal"
+            android:src="@drawable/ic_action_refresh"
             android:id="@+id/error_refresh_button"
             android:layout_below="@id/error_message_view"
-            android:typeface="normal"
             android:layout_centerHorizontal="true"
             android:elevation="0dp" />
 

@@ -2,12 +2,17 @@ package com.dawhey.mlij_blogapp.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -16,6 +21,7 @@ import android.widget.RelativeLayout;
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
+import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 import com.dawhey.mlij_blogapp.R;
@@ -42,6 +48,8 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chapters_list, container, false);
+        setHasOptionsMenu(true);
+
         swipeRefreshView = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_chapters_view);
         swipeRefreshView.setOnRefreshListener(this);
         swipeRefreshView.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
@@ -108,5 +116,32 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                 c.setContent(chapter.getContent());
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.chapters_list_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Chapter lastRead = PreferencesManager.getInstance(getContext()).getLastChapter();
+        if (lastRead != null) {
+            ChapterFragment chapterFragment = new ChapterFragment();
+            chapterFragment.setOnChapterDownloadedListener(this);
+            chapterFragment.setOpenedFromBookmark(true);
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in_faster, R.anim.fade_out)
+                    .replace(R.id.content_main, chapterFragment, MainActivity.TAG_FRAGMENT_TO_RETAIN)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            if (getView() != null) {
+                Snackbar.make(getView(), getString(R.string.no_last_read_chapter), Snackbar.LENGTH_SHORT).show();
+            }
+        }
+        return false;
     }
 }

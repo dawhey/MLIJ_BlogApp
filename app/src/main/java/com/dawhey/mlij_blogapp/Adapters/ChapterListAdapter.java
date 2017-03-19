@@ -110,11 +110,10 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         PreferencesManager.getInstance(context).setLastChapter(chapter);
 
         ChapterFragment chapterFragment = new ChapterFragment();
-
         chapterFragment.setSharedElementEnterTransition(new DetailsTransition());
+        chapterFragment.setSharedElementReturnTransition(new DetailsTransition());
         chapterFragment.setEnterTransition(new Fade());
         callingFragment.setExitTransition(new Fade());
-        chapterFragment.setSharedElementReturnTransition(new DetailsTransition());
 
         if (callingFragment instanceof ChaptersListFragment) {
             chapterFragment.setOnChapterDownloadedListener((ChaptersListFragment) callingFragment);

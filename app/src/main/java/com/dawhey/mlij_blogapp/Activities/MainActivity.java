@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final String TAG_FRAGMENT_TO_RETAIN = "RetainFragment";
     private Toolbar toolbar;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             openFragment(retainedFragment);
         } else {
             openFragment(new ChaptersListFragment());
+            navigationView.setCheckedItem(R.id.nav_chapters);
         }
     }
 
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
