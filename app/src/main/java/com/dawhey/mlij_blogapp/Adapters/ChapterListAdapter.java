@@ -3,8 +3,10 @@ package com.dawhey.mlij_blogapp.Adapters;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +14,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dawhey.mlij_blogapp.Activities.MainActivity;
+import com.dawhey.mlij_blogapp.Fragments.ChapterFragment;
+import com.dawhey.mlij_blogapp.Fragments.ChaptersListFragment;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
+import com.dawhey.mlij_blogapp.Transitions.DetailsTransition;
+
 import java.util.List;
 
 /**
@@ -25,6 +32,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private List<Chapter> posts;
     private OnChapterClickListener listener;
     private Context context;
+    private Fragment callingFragment;
     private List<Chapter> favorites;
 
     private ColorStateList regularTint;
@@ -42,8 +50,9 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         }
     }
 
-    public ChapterListAdapter(Context context) {
+    public ChapterListAdapter(Context context, Fragment fragment) {
         this.context = context;
+        this.callingFragment = fragment;
         PreferencesManager preferencesManager = PreferencesManager.getInstance(context);
         favorites = preferencesManager.getFavoriteChapters();
 
@@ -71,19 +80,24 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         Chapter post = posts.get(position);
         holder.chapterTitleView.setText(post.getTitleFormatted());
         holder.chapterNumberView.setText(post.getChapterHeaderFormatted());
+        holder.favoriteIconView.setImageTintList(favorites.contains(post) ? favoriteTint : regularTint);
 
         ViewCompat.setTransitionName(holder.chapterTitleView, String.valueOf(position) + "_chapterTitle");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onChapterItemClick(posts.get(position), holder);
+                handleClick(holder);
             }
         });
 
-        if (favorites.contains(post)) {
-            holder.favoriteIconView.setImageTintList(favoriteTint);
+    }
+
+    private void handleClick(ViewHolder holder) {
+        Chapter clicked = posts.get(holder.getAdapterPosition());
+        if (listener != null) {
+            listener.onChapterItemClick(clicked, holder);
         } else {
-            holder.favoriteIconView.setImageTintList(regularTint);
+            launchChapterFragment(clicked, holder);
         }
     }
 
@@ -92,7 +106,25 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         return posts.size();
     }
 
-    public interface OnChapterClickListener {
-        void onChapterItemClick(Chapter chapter, ViewHolder holder);
+    private void launchChapterFragment(Chapter chapter, ViewHolder holder) {
+        PreferencesManager.getInstance(context).setLastChapter(chapter);
+
+        ChapterFragment chapterFragment = new ChapterFragment();
+
+        chapterFragment.setSharedElementEnterTransition(new DetailsTransition());
+        chapterFragment.setEnterTransition(new Fade());
+        callingFragment.setExitTransition(new Fade());
+        chapterFragment.setSharedElementReturnTransition(new DetailsTransition());
+
+        if (callingFragment instanceof ChaptersListFragment) {
+            chapterFragment.setOnChapterDownloadedListener((ChaptersListFragment) callingFragment);
+        }
+
+        callingFragment.getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(holder.chapterTitleView, context.getString(R.string.shared_transition_title_tag))
+                .replace(R.id.content_main, chapterFragment, MainActivity.TAG_FRAGMENT_TO_RETAIN)
+                .addToBackStack(null)
+                .commit();
     }
 }

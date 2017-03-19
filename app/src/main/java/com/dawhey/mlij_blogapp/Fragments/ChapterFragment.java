@@ -43,6 +43,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
 
     private Chapter chapter;
 
+    private OnChapterDownloadedListener listener;
     private View dividerLine;
     private TextView titleView;
     private RelativeLayout errorView;
@@ -118,6 +119,9 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         super.onResume();
         if (chapter.getContent() == null) {
             downloadChapterContent();
+        } else {
+            contentView.setText(Html.fromHtml(chapter.getContent()));
+            showContentView();
         }
     }
 
@@ -128,6 +132,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             @Override
             public void onResponse(Call<Chapter> call, Response<Chapter> response) {
                 chapter = response.body();
+                listener.onChapterDownloaded(chapter);
                 contentView.setText(Html.fromHtml(chapter.getContent()));
                 showContentView();
             }
@@ -188,5 +193,13 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             favoriteButton.show();
         }
         scrollPosition = newScrollPosition;
+    }
+
+    public void setOnChapterDownloadedListener(OnChapterDownloadedListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnChapterDownloadedListener {
+        void onChapterDownloaded(Chapter chapter);
     }
 }

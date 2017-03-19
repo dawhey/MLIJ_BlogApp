@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +16,9 @@ import android.widget.RelativeLayout;
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
-import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 import com.dawhey.mlij_blogapp.R;
-import com.dawhey.mlij_blogapp.Transitions.DetailsTransition;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +28,7 @@ import retrofit2.Response;
  * Created by dawhey on 17.03.17.
  */
 
-public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ChapterListAdapter.OnChapterClickListener {
+public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ChapterFragment.OnChapterDownloadedListener {
 
     private static final String TAG = "ChaptersListFragment";
 
@@ -52,10 +49,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
         chaptersListView = (RecyclerView) root.findViewById(R.id.chapters_list_view);
         chaptersListView.setLayoutManager(new LinearLayoutManager(getContext()));
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.fragment_chapters));
-
-        chapterListAdapter = new ChapterListAdapter(getContext());
-        chapterListAdapter.setOnChapterClickListener(this);
-
+        chapterListAdapter = new ChapterListAdapter(getContext(), this);
         return root;
     }
 
@@ -108,21 +102,11 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
     }
 
     @Override
-    public void onChapterItemClick(Chapter clickedChapter, ChapterListAdapter.ViewHolder holder) {
-        PreferencesManager.getInstance(getContext()).setLastChapter(clickedChapter);
-
-        ChapterFragment chapterFragment = new ChapterFragment();
-
-        chapterFragment.setSharedElementEnterTransition(new DetailsTransition());
-        chapterFragment.setEnterTransition(new Fade());
-        setExitTransition(new Fade());
-        chapterFragment.setSharedElementReturnTransition(new DetailsTransition());
-
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .addSharedElement(holder.chapterTitleView, getString(R.string.shared_transition_title_tag))
-                .replace(R.id.content_main, chapterFragment, MainActivity.TAG_FRAGMENT_TO_RETAIN)
-                .addToBackStack(TAG)
-                .commit();
+    public void onChapterDownloaded(Chapter chapter) {
+        for (Chapter c : posts.getChapters()) {
+            if (c.getId().equals(chapter.getId())) {
+                c.setContent(chapter.getContent());
+            }
+        }
     }
 }

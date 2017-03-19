@@ -2,8 +2,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/favorites_list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/recycler_view_padding"
+        android:paddingBottom="@dimen/recycler_view_padding"
+        android:paddingStart="@dimen/recycler_view_padding"
+        android:paddingEnd="@dimen/recycler_view_padding"
+        android:clipToPadding="false"/>
+
+    <RelativeLayout
+        android:id="@+id/no_favorites_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/fragment_favorites"/>
+        android:visibility="gone"
+        android:gravity="center">
+
+        <View
+            android:layout_width="150dp"
+            android:id="@+id/error_divider"
+            android:layout_marginTop="@dimen/default_app_padding"
+            android:layout_height="2dp"
+            android:background="@color/colorAccent"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/error_message_view" />
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/error_divider"
+            android:src="@drawable/no_favs"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:textColor="@color/textDefault"
+            android:text="@string/no_favs_message"
+            android:id="@+id/error_message_view"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
