@@ -17,9 +17,11 @@ import com.dawhey.mlij_blogapp.Fragments.AboutBlogFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChaptersListFragment;
 import com.dawhey.mlij_blogapp.Fragments.FavoritesFragment;
 import com.dawhey.mlij_blogapp.R;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TOPIC = "news";
     public static final String TAG_FRAGMENT_TO_RETAIN = "RetainFragment";
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
