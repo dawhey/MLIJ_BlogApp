@@ -99,8 +99,6 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                     posts = response.body();
                     if (manager.checkIfFirstRun()) {
                         saveOldChapters(posts.getChapters());
-                    } else {
-                        initializeNewChaptersState();
                     }
                     chapterListAdapter.setPosts(posts.getChapters());
                     chaptersListView.setAdapter(chapterListAdapter);
@@ -164,14 +162,6 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
             }
         }
         return false;
-    }
-
-    private void initializeNewChaptersState() {
-        for (Chapter chapter : posts.getChapters()) {
-            if (!manager.isInOldChapters(chapter.getId())) {
-                chapter.setNew(true);
-            }
-        }
     }
 
     private void saveOldChapters(List<Chapter> chapters) {

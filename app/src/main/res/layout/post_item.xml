@@ -64,6 +64,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignBottom="@id/chapter_title_view"/>
 
+
             <TextView
                 android:text="Nowy"
                 android:layout_width="wrap_content"

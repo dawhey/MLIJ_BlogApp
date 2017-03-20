@@ -30,8 +30,6 @@ public class Chapter {
     @Expose
     private String title;
 
-    private boolean isNew;
-
     public String getId() {
         return id;
     }
@@ -105,13 +103,5 @@ public class Chapter {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(df.parse(published));
         return calendar;
-    }
-
-    public boolean isNew() {
-        return isNew;
-    }
-
-    public void setNew(boolean aNew) {
-        isNew = aNew;
     }
 }
