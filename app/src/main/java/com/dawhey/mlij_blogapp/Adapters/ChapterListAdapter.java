@@ -38,15 +38,16 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private ColorStateList regularTint;
     private ColorStateList favoriteTint;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView chapterTitleView, chapterNumberView;
-        public ImageView favoriteIconView;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView chapterTitleView, chapterNumberView, chapterNewView;
+        ImageView favoriteIconView;
 
         ViewHolder(View v) {
             super(v);
             chapterTitleView = (TextView) v.findViewById(R.id.chapter_title_view);
             chapterNumberView = (TextView) v.findViewById(R.id.chapter_number_view);
             favoriteIconView = (ImageView) v.findViewById(R.id.chapter_favourites_icon);
+            chapterNewView = (TextView) v.findViewById(R.id.chapter_new_label);
         }
     }
 
@@ -81,6 +82,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         holder.chapterTitleView.setText(post.getTitleFormatted());
         holder.chapterNumberView.setText(post.getChapterHeaderFormatted());
         holder.favoriteIconView.setImageTintList(favorites.contains(post) ? favoriteTint : regularTint);
+        holder.chapterNewView.setVisibility(post.isNew() ? View.VISIBLE : View.INVISIBLE);
 
         ViewCompat.setTransitionName(holder.chapterTitleView, String.valueOf(position) + "_chapterTitle");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +109,11 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     private void launchChapterFragment(Chapter chapter, ViewHolder holder) {
-        PreferencesManager.getInstance(context).setLastChapter(chapter);
-
+        PreferencesManager manager = PreferencesManager.getInstance(context);
+        manager.setLastChapter(chapter);
+        if (chapter.isNew()) {
+            manager.addToOldChapters(chapter.getId());
+        }
         ChapterFragment chapterFragment = new ChapterFragment();
         chapterFragment.setSharedElementEnterTransition(new DetailsTransition());
         chapterFragment.setSharedElementReturnTransition(new DetailsTransition());

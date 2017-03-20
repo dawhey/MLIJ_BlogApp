@@ -4,6 +4,14 @@ package com.dawhey.mlij_blogapp.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 public class Chapter {
 
     @SerializedName("id")
@@ -21,6 +29,8 @@ public class Chapter {
     @SerializedName("title")
     @Expose
     private String title;
+
+    private boolean isNew;
 
     public String getId() {
         return id;
@@ -52,10 +62,6 @@ public class Chapter {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getFormattedPublishDate() {
-        return published.split("T")[0];
     }
 
     public String getTitleFormatted() {
@@ -91,5 +97,21 @@ public class Chapter {
         } else {
             return false;
         }
+    }
+
+    public Calendar getPublishedDate() throws ParseException {
+        Locale locale = new Locale("pl", "PL");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", locale);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(df.parse(published));
+        return calendar;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
     }
 }

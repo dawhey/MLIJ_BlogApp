@@ -85,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = new FavoritesFragment();
         } else if (id == R.id.nav_about_blog) {
             fragment = new AboutBlogFragment();
-        } else if (id == R.id.nav_settings) {
-            //TODO: Add settings fragment
         }
 
         new Handler().postDelayed(new OpenFragmentRunnable(fragment), OpenFragmentRunnable.DELAY);

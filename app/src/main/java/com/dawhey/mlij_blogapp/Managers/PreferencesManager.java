@@ -16,6 +16,8 @@ public class PreferencesManager {
     private static final String PREF_NAME = "prefs";
     private static final String LAST_CHAPTER_KEY = "LastChapter";
     private static final String FAVORITES_KEY = "FavoriteChapters";
+    private static final String OLD_CHAPTERS_KEY = "oldChapters";
+    private static final String FIRST_RUN_KEY = "firstRun";
 
 
     private static PreferencesManager instance;
@@ -95,6 +97,52 @@ public class PreferencesManager {
         if (favorites.contains(chapter)) {
             favorites.remove(chapter);
             saveFavoriteChapters(favorites);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkIfFirstRun() {
+        if (preferences.getBoolean(FIRST_RUN_KEY, true)) {
+            preferences.edit().putBoolean(FIRST_RUN_KEY, false).commit();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public List<String> getOldChapters() {
+        String json = preferences.getString(OLD_CHAPTERS_KEY, null);
+        if (json != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            return gson.fromJson(json, listType);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void saveOldChapters(List<String> oldChapters) {
+        String json = new Gson().toJson(oldChapters);
+        preferences.edit().putString(OLD_CHAPTERS_KEY, json).commit();
+    }
+
+    public boolean isInOldChapters(String chapter) {
+        return getOldChapters().contains(chapter);
+    }
+
+    /**
+     *
+     * @param chapter to be added;
+     * @return true if chapter was added,
+     * false if this chapter was already in the list
+     */
+    public boolean addToOldChapters(String chapter) {
+        List<String> oldChapters = getOldChapters();
+        if (!oldChapters.contains(chapter)) {
+            oldChapters.add(chapter);
+            saveOldChapters(oldChapters);
             return true;
         } else {
             return false;

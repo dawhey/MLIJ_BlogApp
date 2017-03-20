@@ -1,5 +1,6 @@
 package com.dawhey.mlij_blogapp.Fragments;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
@@ -25,6 +27,12 @@ import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 import com.dawhey.mlij_blogapp.R;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,12 +45,20 @@ import retrofit2.Response;
 public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ChapterFragment.OnChapterDownloadedListener {
 
     private static final String TAG = "ChaptersListFragment";
+    private static long installTime;
+    PreferencesManager manager;
 
     private ChapterListAdapter chapterListAdapter;
     private RecyclerView chaptersListView;
     private SwipeRefreshLayout swipeRefreshView;
     private RelativeLayout errorView;
     Posts posts;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        manager = PreferencesManager.getInstance(getContext());
+    }
 
     @Nullable
     @Override
@@ -81,6 +97,11 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                 swipeRefreshView.setRefreshing(false);
                 if (response != null) {
                     posts = response.body();
+                    if (manager.checkIfFirstRun()) {
+                        saveOldChapters(posts.getChapters());
+                    } else {
+                        initializeNewChaptersState();
+                    }
                     chapterListAdapter.setPosts(posts.getChapters());
                     chaptersListView.setAdapter(chapterListAdapter);
                     if (getContext() != null) {
@@ -143,5 +164,21 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
             }
         }
         return false;
+    }
+
+    private void initializeNewChaptersState() {
+        for (Chapter chapter : posts.getChapters()) {
+            if (!manager.isInOldChapters(chapter.getId())) {
+                chapter.setNew(true);
+            }
+        }
+    }
+
+    private void saveOldChapters(List<Chapter> chapters) {
+        List<String> chapterIds = new ArrayList<>();
+        for (Chapter c : chapters) {
+            chapterIds.add(c.getId());
+        }
+        manager.saveOldChapters(chapterIds);
     }
 }
