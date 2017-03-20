@@ -45,7 +45,6 @@ import retrofit2.Response;
 public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ChapterFragment.OnChapterDownloadedListener {
 
     private static final String TAG = "ChaptersListFragment";
-    private static long installTime;
     PreferencesManager manager;
 
     private ChapterListAdapter chapterListAdapter;
@@ -100,6 +99,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                     if (manager.checkIfFirstRun()) {
                         saveOldChapters(posts.getChapters());
                     }
+
                     chapterListAdapter.setPosts(posts.getChapters());
                     chaptersListView.setAdapter(chapterListAdapter);
                     if (getContext() != null) {

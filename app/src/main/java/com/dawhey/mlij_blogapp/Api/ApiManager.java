@@ -11,8 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManager {
 
-    //6867644820719577961
-    private static final String API_BASE_URL = "https://www.googleapis.com/blogger/v3/blogs/5161262949432411129/";
+    private static final String API_BASE_URL = "https://www.googleapis.com/blogger/v3/blogs/6867644820719577961/";
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     private static Retrofit.Builder builder =

@@ -35,7 +35,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private Context context;
     private Fragment callingFragment;
     private List<Chapter> favorites;
-    private List<String> oldChapters;
+    private PreferencesManager preferencesManager;
 
     private ColorStateList regularTint;
     private ColorStateList favoriteTint;
@@ -56,9 +56,8 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     public ChapterListAdapter(Context context, Fragment fragment) {
         this.context = context;
         this.callingFragment = fragment;
-        PreferencesManager preferencesManager = PreferencesManager.getInstance(context);
+        preferencesManager = PreferencesManager.getInstance(context);
         favorites = preferencesManager.getFavoriteChapters();
-        oldChapters = preferencesManager.getOldChapters();
 
         regularTint = ColorStateList.valueOf(context.getResources().getColor(R.color.grayBright));
         favoriteTint = ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent));
@@ -85,7 +84,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         holder.chapterTitleView.setText(post.getTitleFormatted());
         holder.chapterNumberView.setText(post.getChapterHeaderFormatted());
         holder.favoriteIconView.setImageTintList(favorites.contains(post) ? favoriteTint : regularTint);
-        holder.chapterNewView.setVisibility(!oldChapters.contains(post.getId()) ? View.VISIBLE : View.INVISIBLE);
+        holder.chapterNewView.setVisibility(!preferencesManager.isInOldChapters(post.getId()) ? View.VISIBLE : View.INVISIBLE);
 
         ViewCompat.setTransitionName(holder.chapterTitleView, String.valueOf(position) + "_chapterTitle");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +113,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private void launchChapterFragment(Chapter chapter, ViewHolder holder) {
         PreferencesManager manager = PreferencesManager.getInstance(context);
         manager.setLastChapter(chapter);
-        if (!oldChapters.contains(chapter.getId())) {
+        if (!preferencesManager.isInOldChapters(chapter.getId())) {
             manager.addToOldChapters(chapter.getId());
         }
         ChapterFragment chapterFragment = new ChapterFragment();
