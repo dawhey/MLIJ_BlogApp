@@ -3,7 +3,6 @@ package com.dawhey.mlij_blogapp.Activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,10 +12,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.dawhey.mlij_blogapp.Fragments.AboutBlogFragment;
+import com.dawhey.mlij_blogapp.Fragments.ChapterFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChaptersListFragment;
 import com.dawhey.mlij_blogapp.Fragments.FavoritesFragment;
 import com.dawhey.mlij_blogapp.R;
@@ -102,8 +101,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void openFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStack();
+            if (!(fragment instanceof ChapterFragment)) {
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStack();
+                }
             }
 
             FragmentTransaction ft = fragmentManager.beginTransaction();

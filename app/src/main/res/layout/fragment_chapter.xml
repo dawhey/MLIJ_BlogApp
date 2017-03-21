@@ -36,23 +36,23 @@
                 android:layout_below="@id/chapter_title_view"
                 android:background="@color/primaryViolet"/>
 
-                <RelativeLayout
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_divider">
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/title_divider">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/alternative_padding"
-                        android:paddingStart="@dimen/alternative_padding"
-                        android:paddingEnd="@dimen/alternative_padding"
-                        android:paddingTop="@dimen/default_app_padding"
-                        android:textColor="@color/textDarker"
-                        android:textSize="@dimen/chapter_content"
-                        android:id="@+id/chapter_content_view"
-                        android:visibility="gone" />
-                </RelativeLayout>
+                    android:paddingBottom="@dimen/alternative_padding"
+                    android:paddingStart="@dimen/alternative_padding"
+                    android:paddingEnd="@dimen/alternative_padding"
+                    android:paddingTop="@dimen/default_app_padding"
+                    android:textColor="@color/textDarker"
+                    android:textSize="@dimen/chapter_content"
+                    android:id="@+id/chapter_content_view"
+                    android:visibility="gone" />
+            </RelativeLayout>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
@@ -72,7 +72,7 @@
             app:fabSize="normal"
             android:visibility="gone"
             android:src="@drawable/ic_favorite_white"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="75dp"
             android:layout_marginEnd="@dimen/alternative_padding"/>
 
     </android.support.design.widget.CoordinatorLayout>
