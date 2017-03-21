@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_app_padding"
-                android:textSize="22sp"
+                android:textSize="@dimen/chapter_title"
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:maxLines="2"
@@ -44,12 +44,12 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="24dp"
-                        android:paddingStart="24dp"
-                        android:paddingEnd="24dp"
+                        android:paddingBottom="@dimen/alternative_padding"
+                        android:paddingStart="@dimen/alternative_padding"
+                        android:paddingEnd="@dimen/alternative_padding"
                         android:paddingTop="@dimen/default_app_padding"
                         android:textColor="@color/textDarker"
-                        android:textSize="19sp"
+                        android:textSize="@dimen/chapter_content"
                         android:id="@+id/chapter_content_view"
                         android:visibility="gone" />
                 </RelativeLayout>
@@ -65,15 +65,15 @@
             android:id="@+id/favorite_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:clickable="true"
             app:backgroundTint="@color/colorAccent"
             android:tint="@color/cardview_light_background"
             app:fabSize="normal"
             android:visibility="gone"
             android:src="@drawable/ic_favorite_white"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="24dp"/>
+            android:layout_marginBottom="@dimen/alternative_padding"
+            android:layout_marginEnd="@dimen/alternative_padding"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -87,7 +87,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="@dimen/error_message"
             android:gravity="center"
             android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"

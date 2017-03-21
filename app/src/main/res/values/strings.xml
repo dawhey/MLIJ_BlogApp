@@ -4,11 +4,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
     <string name="fragment_chapters">Rozdziały</string>
     <string name="fragment_favorites">Ulubione</string>
     <string name="fragment_about_blog">O Blogu</string>
-    <string name="fragment_settings">Ustawienia</string>
     <string name="check_internet_connection">Sprawdź połączenie z internetem.</string>
     <string name="shared_transition_title_tag">chapterTitle</string>
     <string name="refresh">Odśwież</string>
@@ -28,4 +26,5 @@
     <string name="send_mail">Wyślij maila</string>
     <string name="facebook_page_url" formatted="false">https://www.facebook.com/M%C5%82odo%C5%9B%C4%87-Lily-i-Jamesa-166792640087045/</string>
     <string name="facebook_page_id" formatted="false">M%C5%82odo%C5%9B%C4%87-Lily-i-Jamesa-166792640087045</string>
+    <string name="new_label">Nowy</string>
 </resources>

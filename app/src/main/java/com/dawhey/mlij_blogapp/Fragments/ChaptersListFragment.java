@@ -1,6 +1,5 @@
 package com.dawhey.mlij_blogapp.Fragments;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
@@ -28,10 +25,7 @@ import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 import com.dawhey.mlij_blogapp.R;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;

@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.dawhey.mlij_blogapp.Fragments.AboutBlogFragment;
-import com.dawhey.mlij_blogapp.Fragments.ChapterFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChaptersListFragment;
 import com.dawhey.mlij_blogapp.Fragments.FavoritesFragment;
 import com.dawhey.mlij_blogapp.R;

@@ -1,8 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
@@ -11,4 +10,22 @@
     <dimen name="recycler_view_padding">8dp</dimen>
     <dimen name="about_icon_size">70dp</dimen>
     <dimen name="about_icon_label_size">12sp</dimen>
+    <dimen name="about_logo_size">200dp</dimen>
+    <dimen name="about_label">18sp</dimen>
+    <dimen name="about_desc">18sp</dimen>
+    <dimen name="about_title">20sp</dimen>
+    <dimen name="alternative_padding">24dp</dimen>
+    <dimen name="chapter_content">19sp</dimen>
+    <dimen name="chapter_title">22sp</dimen>
+    <dimen name="error_message">20sp</dimen>
+    <dimen name="alternative_error_message">24sp</dimen>
+    <dimen name="error_harry">120dp</dimen>
+    <dimen name="kettle">120dp</dimen>
+    <dimen name="no_favs_message">24sp</dimen>
+    <dimen name="nav_bar_logo">140dp</dimen>
+    <dimen name="nav_bar_title">22sp</dimen>
+    <dimen name="default_small_padding">4dp</dimen>
+    <dimen name="chapter_item_number">18sp</dimen>
+    <dimen name="chapter_ite_title">16sp</dimen>
+    <dimen name="chapter_item_new_label">13sp</dimen>
 </resources>

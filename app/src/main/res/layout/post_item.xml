@@ -10,19 +10,19 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:foreground="?attr/selectableItemBackground"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="@dimen/default_small_padding"
+        android:layout_marginTop="@dimen/default_small_padding"
         android:id="@+id/chapter_card"
         app:cardBackgroundColor="@color/brightBackground"
-        app:cardElevation="4dp"
-        android:layout_marginEnd="4dp"
-        app:cardCornerRadius="4dp"
+        app:cardElevation="@dimen/default_small_padding"
+        android:layout_marginEnd="@dimen/default_small_padding"
+        app:cardCornerRadius="@dimen/default_small_padding"
         android:layout_marginBottom="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp">
+            android:padding="@dimen/default_small_padding">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -31,8 +31,8 @@
                 android:layout_marginTop="@dimen/card_children_padding"
                 android:layout_marginStart="@dimen/card_children_padding"
                 android:layout_marginEnd="@dimen/card_children_padding"
-                android:layout_marginBottom="8dp"
-                android:textSize="18sp"
+                android:layout_marginBottom="@dimen/card_children_padding"
+                android:textSize="@dimen/chapter_item_number"
                 android:textColor="@color/primaryViolet"
                 android:textStyle="bold"
                 android:id="@+id/chapter_number_view" />
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cudne chwile. blalbablal dwla l d"
-                android:textSize="16sp"
+                android:textSize="@dimen/chapter_ite_title"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:id="@+id/chapter_title_view"
@@ -66,16 +66,16 @@
 
 
             <TextView
-                android:text="Nowy"
+                android:text="@string/new_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/chapter_number_view"
                 android:layout_toEndOf="@+id/chapter_number_view"
-                android:textSize="13sp"
+                android:textSize="@dimen/chapter_item_new_label"
                 android:textAllCaps="true"
                 android:gravity="center"
                 android:textColor="@color/colorAccent"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/card_children_padding"
                 android:id="@+id/chapter_new_label"
                 android:layout_alignTop="@+id/chapter_number_view" />
 

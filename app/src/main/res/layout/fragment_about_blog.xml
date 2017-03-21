@@ -12,7 +12,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/about_logo_size"
             android:id="@+id/logo_about"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
@@ -28,7 +28,7 @@
             android:id="@+id/contact_label"
             android:layout_marginBottom="@dimen/default_app_padding"
             android:layout_below="@id/logo_about"
-            android:textSize="20sp"
+            android:textSize="@dimen/about_title"
             android:textStyle="bold|italic"
             android:textColor="@color/primaryViolet"/>
 
@@ -138,7 +138,7 @@
             android:text="@string/fragment_about_blog"
             android:id="@+id/about_label"
             android:layout_centerHorizontal="true"
-            android:textSize="18sp"
+            android:textSize="@dimen/about_label"
             android:textColor="@color/primaryViolet"
             android:textStyle="bold|italic"
             android:layout_below="@id/about_refs"/>
@@ -147,7 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/about_desc"
-            android:textSize="18sp"
+            android:textSize="@dimen/about_desc"
             android:gravity="center"
             android:textColor="@color/textDefault"
             android:text="@string/about_desc"

@@ -2,7 +2,6 @@ package com.dawhey.mlij_blogapp.Adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +9,7 @@ import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
