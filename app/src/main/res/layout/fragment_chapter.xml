@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView android:layout_width="match_parent"
+    <android.support.v4.widget.NestedScrollView android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/text_scroll_view"
         xmlns:android="http://schemas.android.com/apk/res/android">
@@ -54,7 +54,7 @@
                         android:visibility="gone" />
                 </RelativeLayout>
         </RelativeLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
             app:fabSize="normal"
             android:visibility="gone"
             android:src="@drawable/ic_favorite_white"
-            android:layout_marginBottom="@dimen/alternative_padding"
+            android:layout_marginBottom="80dp"
             android:layout_marginEnd="@dimen/alternative_padding"/>
 
     </android.support.design.widget.CoordinatorLayout>
@@ -89,8 +89,8 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/error_message"
             android:gravity="center"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginEnd="@dimen/alternative_padding"
+            android:layout_marginStart="@dimen/alternative_padding"
             android:textColor="@color/textDefault"
             android:text="@string/check_internet_connection"
             android:id="@+id/error_message_view"

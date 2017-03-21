@@ -22,7 +22,7 @@
     <dimen name="error_harry">120dp</dimen>
     <dimen name="kettle">120dp</dimen>
     <dimen name="no_favs_message">24sp</dimen>
-    <dimen name="nav_bar_logo">140dp</dimen>
+    <dimen name="nav_bar_logo">120dp</dimen>
     <dimen name="nav_bar_title">22sp</dimen>
     <dimen name="default_small_padding">4dp</dimen>
     <dimen name="chapter_item_number">18sp</dimen>
