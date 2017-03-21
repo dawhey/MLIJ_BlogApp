@@ -9,6 +9,7 @@
     <color name="colorAccent">#FF3D00</color>
     <color name="brightBackground">#FAFAFA</color>
     <color name="primaryBlue">#112b35</color>
-    <color name="primaryViolet">#6a4658</color>
-    <color name="blogBackground">#ffeee7</color>
+    <color name="blackOverlay">#22000000</color>
+    <color name="primaryViolet">#593b4a</color>
+    <color name="blogBackground">#fff8f5</color>
 </resources>

@@ -44,13 +44,12 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:typeface="serif"
                         android:paddingBottom="24dp"
                         android:paddingStart="24dp"
                         android:paddingEnd="24dp"
                         android:paddingTop="@dimen/default_app_padding"
                         android:textColor="@color/textDarker"
-                        android:textSize="18sp"
+                        android:textSize="19sp"
                         android:id="@+id/chapter_content_view"
                         android:visibility="gone" />
                 </RelativeLayout>

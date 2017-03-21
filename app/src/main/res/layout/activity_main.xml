@@ -26,7 +26,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@drawable/top_bar"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextAppearance="@style/ActionBarTitle"/>
 
         </android.support.design.widget.AppBarLayout>
@@ -50,8 +49,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:itemIconTint="@drawable/nav_item_selector"
         app:itemTextColor="@drawable/nav_item_selector"
+        app:itemIconTint="@drawable/nav_icon_selector"
         app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

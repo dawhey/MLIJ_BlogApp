@@ -12,7 +12,7 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/font_regular.ttf")
+                .setDefaultFontPath("fonts/alegreya.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
