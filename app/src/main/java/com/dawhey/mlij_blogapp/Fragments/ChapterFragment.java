@@ -3,11 +3,9 @@ package com.dawhey.mlij_blogapp.Fragments;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,23 +33,20 @@ import retrofit2.Response;
  * Created by dawhey on 18.03.17.
  */
 
-public class ChapterFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener{
+public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScrollChangedListener{
 
     private static final String TAG = "ChapterFragment";
 
     private int scrollPosition = 0;
-    private int appBarOffset = 0;
 
     private boolean openedFromBookmark;
     private Chapter chapter;
 
     private OnChapterDownloadedListener listener;
     private View dividerLine;
-    private AppBarLayout appBarLayout;
-
     private TextView titleView;
     private RelativeLayout errorView;
-    private NestedScrollView scrollView;
+    private ScrollView scrollView;
     private FloatingActionButton refreshButton;
     private ProgressBar progressBar;
     private TextView contentView;
@@ -67,6 +62,7 @@ public class ChapterFragment extends Fragment implements AppBarLayout.OnOffsetCh
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chapter, container, false);
+
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(chapter.getChapterHeaderFormatted());
         initViews(root);
         initListeners();
@@ -76,13 +72,12 @@ public class ChapterFragment extends Fragment implements AppBarLayout.OnOffsetCh
     }
 
     private void initViews(View root) {
-        appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
         titleView = (TextView) root.findViewById(R.id.chapter_title_view);
         contentView = (TextView) root.findViewById(R.id.chapter_content_view);
         dividerLine = root.findViewById(R.id.title_divider);
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
         errorView = (RelativeLayout) root.findViewById(R.id.error_chapter_view);
-        scrollView = (NestedScrollView) root.findViewById(R.id.text_scroll_view);
+        scrollView = (ScrollView) root.findViewById(R.id.text_scroll_view);
         refreshButton = (FloatingActionButton) root.findViewById(R.id.error_refresh_button);
         progressBar = (ProgressBar) root.findViewById(R.id.chapter_progressbar);
         favoriteButton = (FloatingActionButton) root.findViewById(R.id.favorite_button);
@@ -90,7 +85,7 @@ public class ChapterFragment extends Fragment implements AppBarLayout.OnOffsetCh
     }
 
     private void initListeners() {
-        appBarLayout.addOnOffsetChangedListener(this);
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
 
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,18 +191,19 @@ public class ChapterFragment extends Fragment implements AppBarLayout.OnOffsetCh
         errorView.setVisibility(View.VISIBLE);
     }
 
-    public void setOnChapterDownloadedListener(OnChapterDownloadedListener listener) {
-        this.listener = listener;
-    }
-
     @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        if (verticalOffset < 0) {
+    public void onScrollChanged() {
+        int newScrollPosition = scrollView.getScrollY();
+        if (newScrollPosition > 0 && newScrollPosition > scrollPosition) {
             favoriteButton.hide();
         } else {
             favoriteButton.show();
         }
-        appBarOffset = verticalOffset;
+        scrollPosition = newScrollPosition;
+    }
+
+    public void setOnChapterDownloadedListener(OnChapterDownloadedListener listener) {
+        this.listener = listener;
     }
 
     public interface OnChapterDownloadedListener {
