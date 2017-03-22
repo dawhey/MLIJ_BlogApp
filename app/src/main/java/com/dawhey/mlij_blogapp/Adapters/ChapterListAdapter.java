@@ -37,9 +37,9 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private ColorStateList regularTint;
     private ColorStateList favoriteTint;
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView chapterTitleView, chapterNumberView, chapterNewView;
-        ImageView favoriteIconView;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView chapterTitleView, chapterNumberView, chapterNewView;
+        public ImageView favoriteIconView;
 
         ViewHolder(View v) {
             super(v);

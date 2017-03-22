@@ -2,9 +2,11 @@ package com.dawhey.mlij_blogapp.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +37,29 @@ public class FavoritesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_favorites, container, false);
+        final View root = inflater.inflate(R.layout.fragment_favorites, container, false);
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.fragment_favorites));
 
         noFavsView = (RelativeLayout) root.findViewById(R.id.no_favorites_view);
         favoriteListView = (RecyclerView) root.findViewById(R.id.favorites_list_view);
         favoriteListView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ItemTouchHelper.SimpleCallback favoritesItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                Snackbar snackbar = initializeRemoveSnackbar((ChapterListAdapter.ViewHolder) viewHolder, root);
+                snackbar.show();
+            }
+        };
+
+        ItemTouchHelper favoritesTouchHelper = new ItemTouchHelper(favoritesItemTouchCallback);
+        favoritesTouchHelper.attachToRecyclerView(favoriteListView);
 
         return root;
     }
@@ -67,6 +86,32 @@ public class FavoritesFragment extends Fragment {
     private void showNoFavsView() {
         noFavsView.setVisibility(View.VISIBLE);
         noFavsView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
+    }
+
+    private Snackbar initializeRemoveSnackbar(final ChapterListAdapter.ViewHolder vh, final View root) {
+        String message = getString(R.string.Removed) + vh.chapterNumberView.getText() + getString(R.string.from_favorites);
+        Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_SHORT).setAction(R.string.undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                favoriteListAdapter.notifyItemChanged(vh.getAdapterPosition());
+            }
+        }).setActionTextColor(getResources().getColor(R.color.colorAccent));
+
+        snackbar.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                super.onDismissed(snackbar, event);
+            }
+        });
+
+        snackbar.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                PreferencesManager.getInstance(getContext()).removeFromFavorites(favorites.get(vh.getAdapterPosition()));
+            }
+        });
+
+        return snackbar;
     }
 
 }

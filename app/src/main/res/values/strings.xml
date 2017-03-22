@@ -30,4 +30,7 @@
     <string name="opened_from_bookmark">Otwarto zakładkę.</string>
     <string name="add_bookmark">Dodaj zakładkę</string>
     <string name="open_bookmark">Otwórz zakładkę</string>
+    <string name="undo">COFNIJ</string>
+    <string name="Removed">"Usunięto "</string>
+    <string name="from_favorites">" z ulubionych."</string>
 </resources>
