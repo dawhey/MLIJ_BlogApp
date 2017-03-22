@@ -7,30 +7,30 @@
     <string name="fragment_chapters">Rozdziały</string>
     <string name="fragment_favorites">Ulubione</string>
     <string name="fragment_about_blog">O Blogu</string>
-    <string name="check_internet_connection">Sprawdź połączenie z internetem.</string>
+    <string name="check_internet_connection">Sprawdź połączenie z internetem</string>
     <string name="shared_transition_title_tag">chapterTitle</string>
     <string name="refresh">Odśwież</string>
-    <string name="deleted_from_favorites_message">Usunięto rozdział z ulubionych.</string>
-    <string name="added_to_favorites_message">Dodano rozdział do ulubionych.</string>
-    <string name="no_favs_message">Brak ulubionych.</string>
-    <string name="no_bookmark">Brak zakładki.</string>
+    <string name="deleted_from_favorites_message">Usunięto rozdział z ulubionych</string>
+    <string name="added_to_favorites_message">Dodano rozdział do ulubionych</string>
+    <string name="no_favs_message">Brak ulubionych</string>
+    <string name="no_bookmark">Brak zakładki</string>
     <string name="last_read_chapter_label">Ostatnio czytany rozdział.</string>
     <string name="about_desc">Początki Młodości Lily i Jamesa sięgają grudnia roku 2007. Historia jest inspirowana i stanowi prequel do serii książek o przygodach Harry\'ego Pottera autorstwa J.K. Rowling i przedstawia losy pokolenia jego rodziców, Lily Evans i Jamesa Pottera. Porusza kwestie pierwszej wojny z Voldemortem i powstania Zakonu Feniksa. Autorką opowiadania jest Margaret. Zastrzega sobie prawo do całości publikowanych treści, oświadcza również, że nie pobiera żadnych korzyści majątkowych w związku z niniejszą historią.</string>
     <string name="website_ref">Strona WWW</string>
     <string name="email_ref">Email</string>
     <string name="facebook_ref">Facebook</string>
     <string name="blog_website_url">http://mlodosc-lily-i-jamesa.blogspot.com/</string>
-    <string name="no_email_client">Brak klienta poczty.</string>
+    <string name="no_email_client">Brak klienta poczty</string>
     <string name="blog_contact_mail">mlodosc.lily.james@gmail.com</string>
     <string name="send_mail">Wyślij maila</string>
     <string name="facebook_page_url" formatted="false">https://www.facebook.com/M%C5%82odo%C5%9B%C4%87-Lily-i-Jamesa-166792640087045/</string>
     <string name="facebook_page_id" formatted="false">M%C5%82odo%C5%9B%C4%87-Lily-i-Jamesa-166792640087045</string>
     <string name="new_label">Nowy</string>
-    <string name="saved_bookmark">Dodano zakładkę.</string>
-    <string name="opened_from_bookmark">Otwarto zakładkę.</string>
+    <string name="saved_bookmark">Dodano zakładkę</string>
+    <string name="opened_from_bookmark">Otwarto zakładkę</string>
     <string name="add_bookmark">Dodaj zakładkę</string>
     <string name="open_bookmark">Otwórz zakładkę</string>
     <string name="undo">COFNIJ</string>
     <string name="Removed">"Usunięto "</string>
-    <string name="from_favorites">" z ulubionych."</string>
+    <string name="from_favorites">" z ulubionych"</string>
 </resources>

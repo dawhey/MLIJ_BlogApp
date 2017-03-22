@@ -89,25 +89,22 @@ public class FavoritesFragment extends Fragment {
     }
 
     private Snackbar initializeRemoveSnackbar(final ChapterListAdapter.ViewHolder vh, final View root) {
+        final boolean[] delete = {true};
         String message = getString(R.string.Removed) + vh.chapterNumberView.getText() + getString(R.string.from_favorites);
-        Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_SHORT).setAction(R.string.undo, new View.OnClickListener() {
+        Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 favoriteListAdapter.notifyItemChanged(vh.getAdapterPosition());
+                delete[0] = false;
             }
         }).setActionTextColor(getResources().getColor(R.color.colorAccent));
 
         snackbar.setCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
-                super.onDismissed(snackbar, event);
-            }
-        });
-
-        snackbar.setCallback(new Snackbar.Callback() {
-            @Override
-            public void onDismissed(Snackbar snackbar, int event) {
-                PreferencesManager.getInstance(getContext()).removeFromFavorites(favorites.get(vh.getAdapterPosition()));
+                if (delete[0]) {
+                    PreferencesManager.getInstance(getContext()).removeFromFavorites(favorites.get(vh.getAdapterPosition()));
+                }
             }
         });
 
