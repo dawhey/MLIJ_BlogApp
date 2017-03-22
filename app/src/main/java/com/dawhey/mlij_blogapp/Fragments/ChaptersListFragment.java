@@ -147,6 +147,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
             ChapterFragment chapterFragment = new ChapterFragment();
             chapterFragment.setOnChapterDownloadedListener(this);
             chapterFragment.setOpenedFromBookmark(true);
+            ((MainActivity) getActivity()).setCurrentVisibleFragment(ChapterFragment.class);
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in_faster, R.anim.fade_out)

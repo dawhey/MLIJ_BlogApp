@@ -123,6 +123,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             chapterFragment.setOnChapterDownloadedListener((ChaptersListFragment) callingFragment);
         }
 
+        ((MainActivity) callingFragment.getActivity()).setCurrentVisibleFragment(ChapterFragment.class);
         callingFragment.getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .addSharedElement(holder.chapterTitleView, context.getString(R.string.shared_transition_title_tag))

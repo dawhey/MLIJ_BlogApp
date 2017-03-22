@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String TAG_FRAGMENT_TO_RETAIN = "RetainFragment";
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private Class currentVisibleFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (currentVisibleFragment == FavoritesFragment.class
+                    || currentVisibleFragment == AboutBlogFragment.class) {
+                openFragment(new ChaptersListFragment());
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -107,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
 
+            currentVisibleFragment = fragment.getClass();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.content_main, fragment, TAG_FRAGMENT_TO_RETAIN);
             ft.commit();
@@ -116,6 +123,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    public Class getCurrentVisibleFragment() {
+        return currentVisibleFragment;
+    }
+
+    public void setCurrentVisibleFragment(Class currentVisibleFragment) {
+        this.currentVisibleFragment = currentVisibleFragment;
     }
 
     /**
