@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
+import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
 
@@ -44,8 +48,6 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     private Chapter chapter;
 
     private OnChapterDownloadedListener listener;
-    private View dividerLine;
-    private TextView titleView;
     private RelativeLayout errorView;
     private ScrollView scrollView;
     private FloatingActionButton refreshButton;
@@ -63,7 +65,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chapter, container, false);
-
+        setHasOptionsMenu(true);
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(chapter.getChapterHeaderFormatted());
         initViews(root);
         initListeners();
@@ -73,10 +75,10 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     }
 
     private void initViews(View root) {
-        titleView = (TextView) root.findViewById(R.id.chapter_title_view);
-        contentView = (TextView) root.findViewById(R.id.chapter_content_view);
-        dividerLine = root.findViewById(R.id.title_divider);
+        TextView titleView = (TextView) root.findViewById(R.id.chapter_title_view);
+        View dividerLine = root.findViewById(R.id.title_divider);
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
+        contentView = (TextView) root.findViewById(R.id.chapter_content_view);
         errorView = (RelativeLayout) root.findViewById(R.id.error_chapter_view);
         scrollView = (ScrollView) root.findViewById(R.id.text_scroll_view);
         refreshButton = (FloatingActionButton) root.findViewById(R.id.error_refresh_button);
@@ -160,10 +162,10 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         animateContent();
 
         if (openedFromBookmark) {
-            if (getView() != null) {
-                Snackbar.make(favoriteButton, R.string.last_read_chapter_label, Snackbar.LENGTH_SHORT).show();
-                openedFromBookmark = false;
-            }
+            Bookmark bookmark = PreferencesManager.getInstance(getContext()).getBookmark();
+            scrollToPixelOffset(bookmark.getPosition());
+            Snackbar.make(favoriteButton, R.string.opened_from_bookmark, Snackbar.LENGTH_SHORT).show();
+            openedFromBookmark = false;
         }
     }
 
@@ -224,21 +226,46 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             final int firstVisibleCharacterOffset = savedInstanceState.getInt(FIRST_VISIBLE_CHAR_KEY);
-            scrollView.post(new Runnable() {
-                public void run() {
-                    final int firstVisibleLineOffset = contentView.getLayout().getLineForOffset(firstVisibleCharacterOffset);
-                    final int pixelOffset = contentView.getLayout().getLineTop(firstVisibleLineOffset);
-                    scrollView.scrollTo(0, pixelOffset);
-                }
-            });
+            scrollToPixelOffset(firstVisibleCharacterOffset);
         }
+    }
+
+    private void scrollToPixelOffset(final int firstVisibleCharacterOffset) {
+        scrollView.post(new Runnable() {
+            public void run() {
+                final int firstVisibleLineOffset = contentView.getLayout().getLineForOffset(firstVisibleCharacterOffset);
+                final int pixelOffset = contentView.getLayout().getLineTop(firstVisibleLineOffset);
+                scrollView.scrollTo(0, pixelOffset);
+            }
+        });
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        final int firstVisibleLineOffset = contentView.getLayout().getLineForVertical(scrollView.getScrollY());
-        final int firstVisibleCharacterOffset = contentView.getLayout().getLineStart(firstVisibleLineOffset);
+        int firstVisibleCharacterOffset = getFirstVisibleCharacterOffset();
         outState.putInt(FIRST_VISIBLE_CHAR_KEY, firstVisibleCharacterOffset);
+    }
+
+    private int getFirstVisibleCharacterOffset() {
+        final int firstVisibleLineOffset = contentView.getLayout().getLineForVertical(scrollView.getScrollY());
+        return contentView.getLayout().getLineStart(firstVisibleLineOffset);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.chapter_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_last_read) {
+            Bookmark bookmark = new Bookmark(getFirstVisibleCharacterOffset(), chapter);
+            PreferencesManager.getInstance(getContext()).saveBookmark(bookmark);
+            Snackbar.make(favoriteButton, R.string.saved_bookmark, Snackbar.LENGTH_SHORT).show();
+        }
+
+        return false;
     }
 }

@@ -21,6 +21,7 @@ import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
+import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 import com.dawhey.mlij_blogapp.R;
@@ -139,8 +140,10 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Chapter lastRead = PreferencesManager.getInstance(getContext()).getLastChapter();
-        if (lastRead != null) {
+        PreferencesManager manager = PreferencesManager.getInstance(getContext());
+        Bookmark bookmark = manager.getBookmark();
+        if (bookmark != null) {
+            manager.setLastChapter(bookmark.getChapter());
             ChapterFragment chapterFragment = new ChapterFragment();
             chapterFragment.setOnChapterDownloadedListener(this);
             chapterFragment.setOpenedFromBookmark(true);
@@ -152,7 +155,7 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
                     .commit();
         } else {
             if (getView() != null) {
-                Snackbar.make(getView(), getString(R.string.no_last_read_chapter), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), getString(R.string.no_bookmark), Snackbar.LENGTH_SHORT).show();
             }
         }
         return false;

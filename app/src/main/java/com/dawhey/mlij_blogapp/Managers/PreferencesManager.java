@@ -3,6 +3,7 @@ package com.dawhey.mlij_blogapp.Managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,6 +19,8 @@ public class PreferencesManager {
     private static final String FAVORITES_KEY = "FavoriteChapters";
     private static final String OLD_CHAPTERS_KEY = "oldChapters";
     private static final String FIRST_RUN_KEY = "firstRun";
+    private static final String BOOKMARK_KEY = "bookmark";
+
 
 
     private static PreferencesManager instance;
@@ -146,6 +149,21 @@ public class PreferencesManager {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void saveBookmark(Bookmark bookmark) {
+        String json = new Gson().toJson(bookmark);
+        preferences.edit().putString(BOOKMARK_KEY, json).commit();
+    }
+
+    public Bookmark getBookmark() {
+        String json = preferences.getString(BOOKMARK_KEY, null);
+        if (json != null) {
+            Gson gson = new Gson();
+            return gson.fromJson(json, Bookmark.class);
+        } else {
+            return null;
         }
     }
 }
