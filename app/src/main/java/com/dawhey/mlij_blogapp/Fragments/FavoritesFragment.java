@@ -67,6 +67,7 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ((MainActivity) getActivity()).setCurrentVisibleFragment(FavoritesFragment.class);
         favorites = PreferencesManager.getInstance(getContext()).getFavoriteChapters();
         if (favorites != null && !favorites.isEmpty()) {
             showFavorites(favorites);

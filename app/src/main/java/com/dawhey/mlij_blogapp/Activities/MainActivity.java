@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (currentVisibleFragment == FavoritesFragment.class
                     || currentVisibleFragment == AboutBlogFragment.class) {
                 openFragment(new ChaptersListFragment());
+                navigationView.setCheckedItem(R.id.nav_chapters);
             } else {
                 super.onBackPressed();
             }
