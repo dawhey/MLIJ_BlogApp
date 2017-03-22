@@ -35,6 +35,7 @@ import retrofit2.Response;
 
 public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScrollChangedListener{
 
+    private static final String FIRST_VISIBLE_CHAR_KEY = "firstVisibleChar";
     private static final String TAG = "ChapterFragment";
 
     private int scrollPosition = 0;
@@ -216,5 +217,28 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
 
     public void setOpenedFromBookmark(boolean openedFromBookmark) {
         this.openedFromBookmark = openedFromBookmark;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            final int firstVisibleCharacterOffset = savedInstanceState.getInt(FIRST_VISIBLE_CHAR_KEY);
+            scrollView.post(new Runnable() {
+                public void run() {
+                    final int firstVisibleLineOffset = contentView.getLayout().getLineForOffset(firstVisibleCharacterOffset);
+                    final int pixelOffset = contentView.getLayout().getLineTop(firstVisibleLineOffset);
+                    scrollView.scrollTo(0, pixelOffset);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        final int firstVisibleLineOffset = contentView.getLayout().getLineForVertical(scrollView.getScrollY());
+        final int firstVisibleCharacterOffset = contentView.getLayout().getLineStart(firstVisibleLineOffset);
+        outState.putInt(FIRST_VISIBLE_CHAR_KEY, firstVisibleCharacterOffset);
     }
 }
