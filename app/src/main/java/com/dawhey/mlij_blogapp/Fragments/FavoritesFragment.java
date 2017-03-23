@@ -104,7 +104,10 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 if (delete[0]) {
-                    PreferencesManager.getInstance(getContext()).removeFromFavorites(favorites.get(vh.getAdapterPosition()));
+                    Chapter chapterToDelete = favorites.get(vh.getAdapterPosition());
+                    PreferencesManager.getInstance(getContext()).removeFromFavorites(chapterToDelete);
+                    favoriteListAdapter.notifyItemRemoved(vh.getAdapterPosition());
+                    favorites.remove(chapterToDelete);
                 }
             }
         });
