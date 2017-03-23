@@ -28,6 +28,7 @@ import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +40,8 @@ import retrofit2.Response;
 
 public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScrollChangedListener{
 
+    private static final String FAVORITE = "Favorite";
+    private static final String PLACE_BOOKMARK = "Bookmark";
     private static final String FIRST_VISIBLE_CHAR_KEY = "firstVisibleChar";
     private static final String TAG = "ChapterFragment";
 
@@ -110,6 +113,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
                     manager.addToFavorites(chapter);
                     favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
                     Snackbar.make(favoriteButton, R.string.added_to_favorites_message, Snackbar.LENGTH_SHORT).show();
+                    logAddingToFavoritesEvent(chapter);
                 }
             }
         });
@@ -264,8 +268,25 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             Bookmark bookmark = new Bookmark(getFirstVisibleCharacterOffset(), chapter);
             PreferencesManager.getInstance(getContext()).saveBookmark(bookmark);
             Snackbar.make(favoriteButton, R.string.saved_bookmark, Snackbar.LENGTH_SHORT).show();
+            logPlaceBookmark(chapter);
         }
 
         return false;
+    }
+
+    private void logAddingToFavoritesEvent(Chapter chapter) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, chapter.getId());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, chapter.getTitle());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.chapter));
+        FirebaseAnalytics.getInstance(getContext()).logEvent(FAVORITE, bundle);
+    }
+
+    private void logPlaceBookmark(Chapter chapter) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, chapter.getId());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, chapter.getTitle());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.chapter));
+        FirebaseAnalytics.getInstance(getContext()).logEvent(PLACE_BOOKMARK, bundle);
     }
 }

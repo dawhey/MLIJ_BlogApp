@@ -2,6 +2,7 @@ package com.dawhey.mlij_blogapp.Adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
 import com.dawhey.mlij_blogapp.Transitions.DetailsTransition;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.List;
 
@@ -109,6 +111,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
     private void launchChapterFragment(Chapter chapter, ViewHolder holder) {
         PreferencesManager manager = PreferencesManager.getInstance(context);
+        logOpeningChapter(chapter);
         manager.setLastChapter(chapter);
         if (!preferencesManager.isInOldChapters(chapter.getId())) {
             manager.addToOldChapters(chapter.getId());
@@ -130,5 +133,13 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 .replace(R.id.content_main, chapterFragment, MainActivity.TAG_FRAGMENT_TO_RETAIN)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void logOpeningChapter(Chapter chapter) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, chapter.getId());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, chapter.getTitle());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, context.getString(R.string.chapter));
+        FirebaseAnalytics.getInstance(context).logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 }
