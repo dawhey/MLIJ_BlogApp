@@ -7,6 +7,7 @@
     <color name="grayBright">#9E9E9E</color>
     <color name="launcherBlue">#3f51b5</color>
     <color name="colorAccent">#FF3D00</color>
+    <color name="black">#000</color>
     <color name="brightBackground">#FAFAFA</color>
     <color name="primaryBlue">#112b35</color>
     <color name="primaryViolet">#593b4a</color>

@@ -34,4 +34,5 @@
     <string name="Removed">"Usunięto "</string>
     <string name="from_favorites">" z ulubionych"</string>
     <string name="chapter">Chapter</string>
+    <string name="search_by_title">Znajdź tytuł…</string>
 </resources>

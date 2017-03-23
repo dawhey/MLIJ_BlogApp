@@ -2,18 +2,28 @@ package com.dawhey.mlij_blogapp.Adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.TextAppearanceSpan;
 import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
+import com.dawhey.mlij_blogapp.Filters.ChaptersTitleFilter;
 import com.dawhey.mlij_blogapp.Fragments.ChapterFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChaptersListFragment;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
@@ -27,7 +37,7 @@ import java.util.List;
 /**
  * Created by dawhey on 17.03.17.
  */
-public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ViewHolder> {
+public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ViewHolder> implements Filterable {
 
     private List<Chapter> posts;
     private OnChapterClickListener listener;
@@ -35,6 +45,9 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private Fragment callingFragment;
     private List<Chapter> favorites;
     private PreferencesManager preferencesManager;
+
+    private String queryText;
+    private ChaptersTitleFilter filter;
 
     private ColorStateList regularTint;
     private ColorStateList favoriteTint;
@@ -71,6 +84,14 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new ChaptersTitleFilter(this, posts);
+        }
+        return filter;
+    }
+
+    @Override
     public ChapterListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item, parent, false);
@@ -80,7 +101,13 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Chapter post = posts.get(position);
-        holder.chapterTitleView.setText(post.getTitleFormatted());
+
+        if (queryText != null && !queryText.isEmpty()) {
+            holder.chapterTitleView.setText(getSpannableFromQuery(queryText, post.getTitleFormatted()));
+        } else {
+            holder.chapterTitleView.setText(post.getTitleFormatted());
+        }
+
         holder.chapterNumberView.setText(post.getChapterHeaderFormatted());
         holder.favoriteIconView.setImageTintList(favorites.contains(post) ? favoriteTint : regularTint);
         holder.chapterNewView.setVisibility(!preferencesManager.isInOldChapters(post.getId()) ? View.VISIBLE : View.INVISIBLE);
@@ -102,6 +129,26 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         } else {
             launchChapterFragment(clicked, holder);
         }
+    }
+
+    private CharSequence getSpannableFromQuery(String queryText, String originalText) {
+        int startPos = originalText.toLowerCase().indexOf(queryText.toLowerCase());
+        int endPos = startPos + queryText.length();
+
+        if (startPos != -1) {
+            Spannable spannable = new SpannableString(originalText);
+            ColorStateList highlightColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{context.getResources().getColor(R.color.primaryBlue)});
+            TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, highlightColor, null);
+
+            spannable.setSpan(highlightSpan, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return spannable;
+        } else {
+            return originalText;
+        }
+    }
+
+    public void setQueryText(String queryText) {
+        this.queryText = queryText;
     }
 
     @Override
