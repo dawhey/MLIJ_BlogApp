@@ -164,8 +164,11 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             manager.addToOldChapters(chapter.getId());
         }
         ChapterFragment chapterFragment = new ChapterFragment();
-        chapterFragment.setSharedElementEnterTransition(new DetailsTransition());
-        chapterFragment.setSharedElementReturnTransition(new DetailsTransition());
+
+        if (queryText == null || queryText.isEmpty()) {
+            chapterFragment.setSharedElementEnterTransition(new DetailsTransition());
+            chapterFragment.setSharedElementReturnTransition(new DetailsTransition());
+        }
         chapterFragment.setEnterTransition(new Fade());
         callingFragment.setExitTransition(new Fade());
 
