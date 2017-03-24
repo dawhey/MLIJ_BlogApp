@@ -138,12 +138,12 @@
             android:layout_marginEnd="@dimen/alternative_padding"
             android:layout_alignParentTop="true"
             android:id="@+id/slider_wrapper"
-            android:background="@color/brightBackground"
+            android:background="@drawable/slider_rounded_bg"
             android:elevation="4dp">
 
             <SeekBar
                 android:layout_width="wrap_content"
-                android:layout_height="70dp"
+                android:layout_height="@dimen/slider_height"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:paddingStart="@dimen/alternative_padding"
@@ -153,9 +153,9 @@
                 android:id="@+id/font_slider" />
 
             <ImageView
-                android:layout_width="40dp"
+                android:layout_width="@dimen/slider_button"
                 android:id="@+id/accept_font_size"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/slider_button"
                 android:background="?selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:layout_marginEnd="@dimen/alternative_padding"

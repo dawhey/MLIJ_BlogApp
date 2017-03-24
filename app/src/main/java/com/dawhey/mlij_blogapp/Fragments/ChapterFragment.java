@@ -226,7 +226,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         changeFontsizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
     }
 
-    private void hideFontsliderView() {
+    public void hideFontsliderView() {
         changeFontsizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_down_faster));
         changeFontsizeView.setVisibility(View.GONE);
     }
@@ -348,5 +348,9 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, chapter.getTitle());
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.chapter));
         FirebaseAnalytics.getInstance(getContext()).logEvent(PLACE_BOOKMARK, bundle);
+    }
+
+    public RelativeLayout getChangeFontsizeView() {
+        return changeFontsizeView;
     }
 }

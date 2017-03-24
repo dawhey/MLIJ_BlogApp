@@ -29,4 +29,6 @@
     <dimen name="chapter_ite_title">16sp</dimen>
     <dimen name="chapter_item_new_label">13sp</dimen>
     <dimen name="doubled_padding">48dp</dimen>
+    <dimen name="slider_button">40dp</dimen>
+    <dimen name="slider_height">70dp</dimen>
 </resources>

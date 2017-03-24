@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.dawhey.mlij_blogapp.Fragments.AboutBlogFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChapterFragment;
@@ -53,7 +54,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 openFragment(new ChaptersListFragment());
                 navigationView.setCheckedItem(R.id.nav_chapters);
             } else {
-                super.onBackPressed();
+                Fragment fragment = getRetainedFragment();
+                if ((fragment instanceof ChapterFragment) &&
+                        (((ChapterFragment) fragment).getChangeFontsizeView().getVisibility() == View.VISIBLE)) {
+                    ((ChapterFragment) fragment).hideFontsliderView();
+                } else {
+                    super.onBackPressed();
+                }
             }
         }
     }
