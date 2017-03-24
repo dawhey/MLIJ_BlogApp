@@ -17,11 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.Filter;
 import android.widget.RelativeLayout;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
+import com.dawhey.mlij_blogapp.Filters.ChaptersTitleFilter;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
@@ -39,15 +41,20 @@ import retrofit2.Response;
  * Created by dawhey on 17.03.17.
  */
 
-public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ChapterFragment.OnChapterDownloadedListener, SearchView.OnQueryTextListener {
+public class ChaptersListFragment extends Fragment implements
+        SwipeRefreshLayout.OnRefreshListener,
+        ChapterFragment.OnChapterDownloadedListener,
+        SearchView.OnQueryTextListener,
+        ChaptersTitleFilter.OnResultsFilteredListener{
 
     private static final String TAG = "ChaptersListFragment";
-    PreferencesManager manager;
 
+    private PreferencesManager manager;
+    private ChaptersTitleFilter filter;
     private ChapterListAdapter chapterListAdapter;
     private RecyclerView chaptersListView;
     private SwipeRefreshLayout swipeRefreshView;
-    private RelativeLayout errorView;
+    private RelativeLayout errorView, noChaptersView;
     Posts posts;
 
     @Override
@@ -66,10 +73,12 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
         swipeRefreshView.setOnRefreshListener(this);
         swipeRefreshView.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         errorView = (RelativeLayout) root.findViewById(R.id.error_chapters_view);
+        noChaptersView = (RelativeLayout) root.findViewById(R.id.no_chapters_view);
         chaptersListView = (RecyclerView) root.findViewById(R.id.chapters_list_view);
         chaptersListView.setLayoutManager(new LinearLayoutManager(getContext()));
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.fragment_chapters));
         chapterListAdapter = new ChapterListAdapter(getContext(), this);
+
         return root;
     }
 
@@ -99,9 +108,9 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
 
                     chapterListAdapter.setPosts(posts.getChapters());
                     chaptersListView.setAdapter(chapterListAdapter);
-                    if (getContext() != null) {
-                        chaptersListView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
-                    }
+                    chaptersListView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
+                    filter = (ChaptersTitleFilter) chapterListAdapter.getFilter();
+                    filter.setOnResultsFilteredListener(ChaptersListFragment.this);
                 }
             }
 
@@ -184,8 +193,18 @@ public class ChaptersListFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public boolean onQueryTextChange(String newText) {
         if (posts != null) {
-            chapterListAdapter.getFilter().filter(newText);
+            filter.filter(newText);
         }
         return false;
+    }
+
+    @Override
+    public void onResultsFiltered(int count) {
+        if (count == 0) {
+            noChaptersView.setVisibility(View.VISIBLE);
+            noChaptersView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
+        } else {
+            noChaptersView.setVisibility(View.GONE);
+        }
     }
 }

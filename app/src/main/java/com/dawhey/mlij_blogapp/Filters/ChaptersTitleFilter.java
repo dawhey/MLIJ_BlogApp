@@ -15,6 +15,7 @@ import java.util.List;
 
 public class ChaptersTitleFilter extends Filter {
 
+    private OnResultsFilteredListener listener;
     private ChapterListAdapter chapterListAdapter;
     private List<Chapter> originalList;
     private List<Chapter> filteredList;
@@ -52,5 +53,14 @@ public class ChaptersTitleFilter extends Filter {
         chapterListAdapter.setQueryText(charSequence.toString());
         chapterListAdapter.setPosts((List<Chapter>) filterResults.values);
         chapterListAdapter.notifyDataSetChanged();
+        listener.onResultsFiltered(filterResults.count);
+    }
+
+    public void setOnResultsFilteredListener(OnResultsFilteredListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnResultsFilteredListener {
+        void onResultsFiltered(int count);
     }
 }

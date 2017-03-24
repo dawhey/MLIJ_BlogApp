@@ -61,6 +61,45 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/no_chapters_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/alternative_error_message"
+                    android:layout_marginEnd="@dimen/default_app_padding"
+                    android:layout_marginStart="@dimen/default_app_padding"
+                    android:layout_marginTop="@dimen/default_app_padding"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/textDefault"
+                    android:text="Brak rozdziałów"
+                    android:id="@+id/no_chapters_message_view" />
+
+                <View
+                    android:layout_width="150dp"
+                    android:id="@+id/no_chapters_divider"
+                    android:layout_marginTop="@dimen/default_app_padding"
+                    android:layout_height="2dp"
+                    android:background="@color/colorAccent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@id/no_chapters_message_view" />
+
+                <ImageView
+                    android:layout_width="@dimen/error_harry"
+                    android:layout_height="@dimen/error_harry"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@id/no_chapters_divider"
+                    android:src="@drawable/empty_list"/>
+
+            </RelativeLayout>
+
+
         </RelativeLayout>
 
 
