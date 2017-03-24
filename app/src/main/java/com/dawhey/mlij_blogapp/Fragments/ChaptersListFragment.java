@@ -108,7 +108,9 @@ public class ChaptersListFragment extends Fragment implements
 
                     chapterListAdapter.setPosts(posts.getChapters());
                     chaptersListView.setAdapter(chapterListAdapter);
-                    chaptersListView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
+                    if (getContext() != null) {
+                        chaptersListView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
+                    }
                     filter = (ChaptersTitleFilter) chapterListAdapter.getFilter();
                     filter.setOnResultsFilteredListener(ChaptersListFragment.this);
                 }

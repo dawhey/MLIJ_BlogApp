@@ -35,4 +35,7 @@
     <string name="from_favorites">" z ulubionych"</string>
     <string name="chapter">Chapter</string>
     <string name="search_by_title">Znajdź tytuł…</string>
+    <string name="change_font_size">Zmień rozmiar czcionki</string>
+    <string name="default_fontsize_changed">Domyślna czcionka została zmieniona</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
 </resources>

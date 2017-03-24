@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,9 +18,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
@@ -40,28 +43,35 @@ import retrofit2.Response;
 
 public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScrollChangedListener{
 
+    private static final int SLIDER_FONT_OFFSET = 15;
     private static final String FAVORITE = "Favorite";
     private static final String PLACE_BOOKMARK = "Bookmark";
     private static final String FIRST_VISIBLE_CHAR_KEY = "firstVisibleChar";
     private static final String TAG = "ChapterFragment";
 
     private int scrollPosition = 0;
+    private int fontSize = 0;
+    private int changedFontSize = 0;
 
     private boolean openedFromBookmark;
     private Chapter chapter;
 
     private OnChapterDownloadedListener listener;
-    private RelativeLayout errorView;
+    private SeekBar fontSlider;
+    private ImageView changeFontButtonDone;
+    private RelativeLayout errorView, changeFontsizeView;
     private ScrollView scrollView;
     private FloatingActionButton refreshButton;
     private ProgressBar progressBar;
-    private TextView contentView;
+    private TextView contentView, titleView, displayFontSizeView;
     private FloatingActionButton favoriteButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         chapter = PreferencesManager.getInstance(getContext()).getLastChapter();
+        fontSize = PreferencesManager.getInstance(getContext()).getChapterFontSize();
+        changedFontSize = fontSize;
     }
 
     @Nullable
@@ -71,27 +81,65 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         setHasOptionsMenu(true);
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(chapter.getChapterHeaderFormatted());
         initViews(root);
-        initListeners();
+        initViewListeners();
         setFavoriteButton();
 
         return root;
     }
 
     private void initViews(View root) {
-        TextView titleView = (TextView) root.findViewById(R.id.chapter_title_view);
+        titleView = (TextView) root.findViewById(R.id.chapter_title_view);
         View dividerLine = root.findViewById(R.id.title_divider);
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
+        changeFontsizeView = (RelativeLayout) root.findViewById(R.id.font_slider_view);
+        fontSlider = (SeekBar) root.findViewById(R.id.font_slider);
+        changeFontButtonDone = (ImageView) root.findViewById(R.id.accept_font_size);
         contentView = (TextView) root.findViewById(R.id.chapter_content_view);
         errorView = (RelativeLayout) root.findViewById(R.id.error_chapter_view);
         scrollView = (ScrollView) root.findViewById(R.id.text_scroll_view);
         refreshButton = (FloatingActionButton) root.findViewById(R.id.error_refresh_button);
         progressBar = (ProgressBar) root.findViewById(R.id.chapter_progressbar);
         favoriteButton = (FloatingActionButton) root.findViewById(R.id.favorite_button);
+        displayFontSizeView = (TextView) root.findViewById(R.id.display_font_size_text);
         titleView.setText(chapter.getTitleFormatted());
+        contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        displayFontSizeView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        fontSlider.setProgress(fontSize - SLIDER_FONT_OFFSET);
     }
 
-    private void initListeners() {
+    private void initViewListeners() {
         scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
+
+        changeFontButtonDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (changedFontSize != fontSize) {
+                    contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, changedFontSize);
+                    PreferencesManager.getInstance(getContext()).setChapterFontSize(changedFontSize);
+                    Snackbar.make(favoriteButton, R.string.default_fontsize_changed, Snackbar.LENGTH_LONG).show();
+                    fontSize = changedFontSize;
+                }
+                hideFontsliderView();
+            }
+        });
+
+        fontSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                changedFontSize = SLIDER_FONT_OFFSET + i;
+                displayFontSizeView.setTextSize(TypedValue.COMPLEX_UNIT_SP, changedFontSize);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +219,16 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             Snackbar.make(favoriteButton, R.string.opened_from_bookmark, Snackbar.LENGTH_SHORT).show();
             openedFromBookmark = false;
         }
+    }
+
+    private void showFontsliderView() {
+        changeFontsizeView.setVisibility(View.VISIBLE);
+        changeFontsizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
+    }
+
+    private void hideFontsliderView() {
+        changeFontsizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_down_faster));
+        changeFontsizeView.setVisibility(View.GONE);
     }
 
     private void animateContent()
@@ -269,6 +327,8 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             PreferencesManager.getInstance(getContext()).saveBookmark(bookmark);
             Snackbar.make(favoriteButton, R.string.saved_bookmark, Snackbar.LENGTH_SHORT).show();
             logPlaceBookmark(chapter);
+        } else if (item.getItemId() == R.id.action_change_fontsize) {
+            showFontsliderView();
         }
 
         return false;

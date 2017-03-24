@@ -20,6 +20,7 @@ public class PreferencesManager {
     private static final String OLD_CHAPTERS_KEY = "oldChapters";
     private static final String FIRST_RUN_KEY = "firstRun";
     private static final String BOOKMARK_KEY = "bookmark";
+    private static final String FONTSIZE_KEY = "fontsize";
 
 
 
@@ -165,5 +166,13 @@ public class PreferencesManager {
         } else {
             return null;
         }
+    }
+
+    public int getChapterFontSize() {
+        return preferences.getInt(FONTSIZE_KEY, 19);
+    }
+
+    public void setChapterFontSize(int fontSize) {
+        preferences.edit().putInt(FONTSIZE_KEY, fontSize).commit();
     }
 }

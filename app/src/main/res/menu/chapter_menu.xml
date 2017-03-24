@@ -3,8 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_last_read"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         android:title="@string/add_bookmark"
         android:icon="@drawable/ic_add_bookmark"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_change_fontsize"
+        android:orderInCategory="100"
+        android:title="@string/change_font_size"
+        android:icon="@drawable/ic_change_fontsize"
         app:showAsAction="always" />
 </menu>

@@ -119,7 +119,87 @@
         android:id="@+id/chapter_progressbar"
         android:layout_centerInParent="true"
         android:indeterminate="true"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:background="@color/brightBackground"
+        android:visibility="gone"
+        android:id="@+id/font_slider_view">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_app_padding"
+            android:layout_marginBottom="@dimen/default_app_padding"
+            android:layout_marginStart="@dimen/alternative_padding"
+            android:layout_marginEnd="@dimen/alternative_padding"
+            android:layout_alignParentTop="true"
+            android:id="@+id/slider_wrapper"
+            android:background="@color/brightBackground"
+            android:elevation="4dp">
+
+            <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:paddingStart="@dimen/alternative_padding"
+                android:max="10"
+                android:layout_toStartOf="@+id/accept_font_size"
+                android:paddingEnd="@dimen/alternative_padding"
+                android:id="@+id/font_slider" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:id="@+id/accept_font_size"
+                android:layout_height="40dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:layout_marginEnd="@dimen/alternative_padding"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_accept"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_app_padding"
+            android:textSize="@dimen/chapter_title"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/slider_wrapper"
+            android:maxLines="2"
+            android:textColor="@color/primaryViolet"
+            android:text="Podgląd"
+            android:id="@+id/display_title"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:id="@+id/display_divider"
+            android:layout_marginBottom="@dimen/default_app_padding"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_below="@id/display_title"
+            android:background="@color/primaryViolet"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/display_font_size_text"
+            android:text="@string/lorem_ipsum"
+            android:layout_below="@id/display_divider"
+            android:paddingBottom="@dimen/alternative_padding"
+            android:paddingStart="@dimen/alternative_padding"
+            android:paddingEnd="@dimen/alternative_padding"
+            android:paddingTop="@dimen/default_app_padding"
+            android:textColor="@color/textDarker"
+            android:textSize="@dimen/chapter_content"/>
+
+    </RelativeLayout>
 </RelativeLayout>
