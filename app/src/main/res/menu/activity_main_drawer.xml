@@ -7,6 +7,10 @@
                     android:icon="@drawable/ic_local_library_black_24dp"
                     android:title="@string/fragment_chapters" />
                 <item
+                    android:id="@+id/nav_daily_prophet"
+                    android:icon="@drawable/ic_newspaper_black"
+                    android:title="@string/daily_prophet" />
+                <item
                     android:id="@+id/nav_favourites"
                     android:icon="@drawable/ic_favorite_black_24dp"
                     android:title="@string/fragment_favorites" />

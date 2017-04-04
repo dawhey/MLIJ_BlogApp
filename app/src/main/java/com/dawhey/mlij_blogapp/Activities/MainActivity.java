@@ -18,6 +18,7 @@ import android.view.View;
 import com.dawhey.mlij_blogapp.Fragments.AboutBlogFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChapterFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChaptersListFragment;
+import com.dawhey.mlij_blogapp.Fragments.DailyProphetFragment;
 import com.dawhey.mlij_blogapp.Fragments.FavoritesFragment;
 import com.dawhey.mlij_blogapp.R;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (currentVisibleFragment == FavoritesFragment.class
-                    || currentVisibleFragment == AboutBlogFragment.class) {
+                    || currentVisibleFragment == AboutBlogFragment.class
+                        || currentVisibleFragment == DailyProphetFragment.class) {
                 openFragment(new ChaptersListFragment());
                 navigationView.setCheckedItem(R.id.nav_chapters);
             } else {
@@ -99,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = new FavoritesFragment();
         } else if (id == R.id.nav_about_blog) {
             fragment = new AboutBlogFragment();
+        } else if (id == R.id.nav_daily_prophet) {
+            fragment = new DailyProphetFragment();
         }
 
         new Handler().postDelayed(new OpenFragmentRunnable(fragment), OpenFragmentRunnable.DELAY);
