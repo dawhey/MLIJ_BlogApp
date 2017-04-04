@@ -91,6 +91,8 @@ public class ChaptersListFragment extends Fragment implements
         } else {
             chapterListAdapter.setPosts(posts.getChapters());
             chaptersListView.setAdapter(chapterListAdapter);
+            filter = (ChaptersTitleFilter) chapterListAdapter.getFilter();
+            filter.setOnResultsFilteredListener(this);
         }
     }
 

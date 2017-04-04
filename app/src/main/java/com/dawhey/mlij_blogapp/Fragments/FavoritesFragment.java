@@ -108,6 +108,9 @@ public class FavoritesFragment extends Fragment {
                     PreferencesManager.getInstance(getContext()).removeFromFavorites(chapterToDelete);
                     favoriteListAdapter.notifyItemRemoved(vh.getAdapterPosition());
                     favorites.remove(chapterToDelete);
+                    if (favorites.size() == 0) {
+                        showNoFavsView();
+                    }
                 }
             }
         });

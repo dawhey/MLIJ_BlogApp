@@ -328,7 +328,9 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             Snackbar.make(favoriteButton, R.string.saved_bookmark, Snackbar.LENGTH_SHORT).show();
             logPlaceBookmark(chapter);
         } else if (item.getItemId() == R.id.action_change_fontsize) {
-            showFontsliderView();
+            if (changeFontsizeView.getVisibility() != View.VISIBLE) {
+                showFontsliderView();
+            }
         }
 
         return false;
