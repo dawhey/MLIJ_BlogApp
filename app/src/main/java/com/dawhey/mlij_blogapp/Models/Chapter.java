@@ -1,63 +1,6 @@
-
 package com.dawhey.mlij_blogapp.Models;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
-public class Chapter {
-
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("content")
-    @Expose
-    private String content;
-    @SerializedName("published")
-    @Expose
-    private String published;
-    @SerializedName("url")
-    @Expose
-    private String url;
-    @SerializedName("title")
-    @Expose
-    private String title;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPublished() {
-        return published;
-    }
-
-    public void setPublished(String published) {
-        this.published = published;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+public class Chapter extends BlogEntry {
 
     public String getTitleFormatted() {
         String[] titles = title.split(": ");
@@ -77,14 +20,6 @@ public class Chapter {
         }
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Chapter) {
@@ -92,13 +27,5 @@ public class Chapter {
         } else {
             return false;
         }
-    }
-
-    public Calendar getPublishedDate() throws ParseException {
-        Locale locale = new Locale("pl", "PL");
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", locale);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(df.parse(published));
-        return calendar;
     }
 }

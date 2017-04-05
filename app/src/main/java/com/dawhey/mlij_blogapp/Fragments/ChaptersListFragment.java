@@ -24,6 +24,8 @@ import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
 import com.dawhey.mlij_blogapp.Filters.ChaptersTitleFilter;
+import com.dawhey.mlij_blogapp.Listeners.OnChapterDownloadedListener;
+import com.dawhey.mlij_blogapp.Listeners.OnResultsFilteredListener;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
@@ -43,9 +45,9 @@ import retrofit2.Response;
 
 public class ChaptersListFragment extends Fragment implements
         SwipeRefreshLayout.OnRefreshListener,
-        ChapterFragment.OnChapterDownloadedListener,
+        OnChapterDownloadedListener,
         SearchView.OnQueryTextListener,
-        ChaptersTitleFilter.OnResultsFilteredListener{
+        OnResultsFilteredListener {
 
     private static final String TAG = "ChaptersListFragment";
     private static final int NO_RESULTS = 0;

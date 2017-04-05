@@ -20,6 +20,7 @@ android {
         }
         buildTypes.each {
             it.buildConfigField 'String', 'BLOGGER_API_KEY', blogger_api_key
+            it.buildConfigField 'String', 'BLOGGER_API_BASE_URL', blogger_api_base_url
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.dawhey.mlij_blogapp.Api;
 
 import com.dawhey.mlij_blogapp.BuildConfig;
+import com.dawhey.mlij_blogapp.Models.BlogEntry;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 import retrofit2.Call;
@@ -19,4 +20,6 @@ public interface BloggerService {
     @GET("posts/{id}?key=" + BuildConfig.BLOGGER_API_KEY + "&fields=id,url,published,title,content")
     Call<Chapter> getChapter(@Path("id") String id);
 
+    @GET("pages/5695788482197599557?key=" + BuildConfig.BLOGGER_API_KEY)
+    Call<BlogEntry> getProphetPage();
 }
