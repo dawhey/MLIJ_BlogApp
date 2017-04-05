@@ -3,6 +3,7 @@ package com.dawhey.mlij_blogapp.Filters;
 import android.widget.Filter;
 
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
+import com.dawhey.mlij_blogapp.Listeners.OnResultsFilteredListener;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 
 import java.util.ArrayList;
@@ -60,7 +61,4 @@ public class ChaptersTitleFilter extends Filter {
         this.listener = listener;
     }
 
-    public interface OnResultsFilteredListener {
-        void onResultsFiltered(int count);
-    }
 }

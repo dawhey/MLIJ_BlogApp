@@ -1,5 +1,6 @@
-package com.dawhey.mlij_blogapp.Adapters;
+package com.dawhey.mlij_blogapp.Listeners;
 
+import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 
 /**

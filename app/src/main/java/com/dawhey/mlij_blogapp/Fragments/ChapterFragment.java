@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
+import com.dawhey.mlij_blogapp.Listeners.OnChapterDownloadedListener;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
@@ -44,6 +45,8 @@ import retrofit2.Response;
 public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScrollChangedListener{
 
     private static final int SLIDER_FONT_OFFSET = 15;
+    private static final int CONTENT_BEGINNING = 0;
+
     private static final String FAVORITE = "Favorite";
     private static final String PLACE_BOOKMARK = "Bookmark";
     private static final String FIRST_VISIBLE_CHAR_KEY = "firstVisibleChar";
@@ -258,7 +261,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     @Override
     public void onScrollChanged() {
         int newScrollPosition = scrollView.getScrollY();
-        if (newScrollPosition > 0 && newScrollPosition > scrollPosition) {
+        if (newScrollPosition > CONTENT_BEGINNING && newScrollPosition > scrollPosition) {
             favoriteButton.hide();
         } else {
             favoriteButton.show();
@@ -268,10 +271,6 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
 
     public void setOnChapterDownloadedListener(OnChapterDownloadedListener listener) {
         this.listener = listener;
-    }
-
-    public interface OnChapterDownloadedListener {
-        void onChapterDownloaded(Chapter chapter);
     }
 
     public boolean isOpenedFromBookmark() {
@@ -296,7 +295,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             public void run() {
                 final int firstVisibleLineOffset = contentView.getLayout().getLineForOffset(firstVisibleCharacterOffset);
                 final int pixelOffset = contentView.getLayout().getLineTop(firstVisibleLineOffset);
-                scrollView.scrollTo(0, pixelOffset);
+                scrollView.scrollTo(CONTENT_BEGINNING, pixelOffset);
             }
         });
     }
