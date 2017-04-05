@@ -170,7 +170,6 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     @Override
     public void onResume() {
         super.onResume();
-
         if (chapter.getContent() == null) {
             downloadChapterContent();
         } else {
@@ -305,8 +304,10 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        int firstVisibleCharacterOffset = getFirstVisibleCharacterOffset();
-        outState.putInt(FIRST_VISIBLE_CHAR_KEY, firstVisibleCharacterOffset);
+        if (contentView.getLayout() != null) {
+            int firstVisibleCharacterOffset = getFirstVisibleCharacterOffset();
+            outState.putInt(FIRST_VISIBLE_CHAR_KEY, firstVisibleCharacterOffset);
+        }
     }
 
     private int getFirstVisibleCharacterOffset() {

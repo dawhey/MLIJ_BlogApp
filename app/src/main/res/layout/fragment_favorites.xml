@@ -33,7 +33,7 @@
             android:layout_height="@dimen/kettle"
             android:layout_centerHorizontal="true"
             android:layout_above="@id/error_divider"
-            android:src="@drawable/no_favs"/>
+            android:src="@drawable/kettle"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -48,6 +48,7 @@ public class ChaptersListFragment extends Fragment implements
         ChaptersTitleFilter.OnResultsFilteredListener{
 
     private static final String TAG = "ChaptersListFragment";
+    private static final int NO_RESULTS = 0;
 
     private PreferencesManager manager;
     private ChaptersTitleFilter filter;
@@ -55,7 +56,7 @@ public class ChaptersListFragment extends Fragment implements
     private RecyclerView chaptersListView;
     private SwipeRefreshLayout swipeRefreshView;
     private RelativeLayout errorView, noChaptersView;
-    Posts posts;
+    private Posts posts;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +88,7 @@ public class ChaptersListFragment extends Fragment implements
         super.onResume();
         if (posts == null) {
             downloadChaptersList();
+            errorView.setVisibility(View.GONE);
             swipeRefreshView.setRefreshing(true);
         } else {
             chapterListAdapter.setPosts(posts.getChapters());
@@ -204,7 +206,7 @@ public class ChaptersListFragment extends Fragment implements
 
     @Override
     public void onResultsFiltered(int count) {
-        if (count == 0) {
+        if (count == NO_RESULTS) {
             noChaptersView.setVisibility(View.VISIBLE);
             noChaptersView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
         } else {
