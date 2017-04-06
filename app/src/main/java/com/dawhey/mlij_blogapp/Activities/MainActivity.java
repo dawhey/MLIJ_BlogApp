@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
                 Fragment fragment = getRetainedFragment();
                 if ((fragment instanceof ChapterFragment) &&
-                        (((ChapterFragment) fragment).getChangeFontsizeView().getVisibility() == View.VISIBLE)) {
+                        (((ChapterFragment) fragment).getChangeFontSizeView().getVisibility() == View.VISIBLE)) {
                     ((ChapterFragment) fragment).hideFontsliderView();
                 } else {
                     super.onBackPressed();

@@ -1,12 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:paddingTop="@dimen/default_app_padding"
+            android:layout_height="wrap_content"
+            android:id="@+id/prophet_content_view">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_margin="@dimen/default_app_padding"
+                android:gravity="center"
+                android:tint="@color/primaryViolet"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/daily_prophet"
+                android:id="@+id/prophet_image"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:id="@+id/title_divider"
+                android:layout_marginBottom="@dimen/default_app_padding"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_below="@id/prophet_image"
+                android:background="@color/primaryViolet"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/title_divider">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/alternative_padding"
+                    android:paddingStart="@dimen/alternative_padding"
+                    android:paddingEnd="@dimen/alternative_padding"
+                    android:paddingTop="@dimen/default_app_padding"
+                    android:textSize="@dimen/about_desc"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/textDarker"
+                    android:id="@+id/prophet_content_text" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/error_prophet_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/error_message"
+            android:gravity="center"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:textColor="@color/textDefault"
+            android:text="@string/check_internet_connection"
+            android:id="@+id/error_message_view"
+            android:layout_centerHorizontal="true" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_app_padding"
+            android:text="@string/refresh"
+            android:clickable="true"
+            app:backgroundTint="@color/primaryViolet"
+            android:tint="@color/cardview_light_background"
+            app:fabSize="normal"
+            android:src="@drawable/ic_action_refresh"
+            android:id="@+id/error_refresh_button"
+            android:layout_below="@id/error_message_view"
+            android:layout_centerHorizontal="true"
+            android:elevation="0dp" />
+
+    </RelativeLayout>
+
+    <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Daily Prophet" />
+        android:id="@+id/prophet_progressbar"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:visibility="visible"/>
 </RelativeLayout>

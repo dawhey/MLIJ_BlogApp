@@ -62,7 +62,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     private OnChapterDownloadedListener listener;
     private SeekBar fontSlider;
     private ImageView changeFontButtonDone;
-    private RelativeLayout errorView, changeFontsizeView;
+    private RelativeLayout errorView, changeFontSizeView;
     private ScrollView scrollView;
     private FloatingActionButton refreshButton;
     private ProgressBar progressBar;
@@ -94,7 +94,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         titleView = (TextView) root.findViewById(R.id.chapter_title_view);
         View dividerLine = root.findViewById(R.id.title_divider);
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
-        changeFontsizeView = (RelativeLayout) root.findViewById(R.id.font_slider_view);
+        changeFontSizeView = (RelativeLayout) root.findViewById(R.id.font_slider_view);
         fontSlider = (SeekBar) root.findViewById(R.id.font_slider);
         changeFontButtonDone = (ImageView) root.findViewById(R.id.accept_font_size);
         contentView = (TextView) root.findViewById(R.id.chapter_content_view);
@@ -206,6 +206,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         contentView.setVisibility(View.GONE);
         errorView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+        progressBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
     }
 
     private void showContentView() {
@@ -224,13 +225,13 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     }
 
     private void showFontsliderView() {
-        changeFontsizeView.setVisibility(View.VISIBLE);
-        changeFontsizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
+        changeFontSizeView.setVisibility(View.VISIBLE);
+        changeFontSizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
     }
 
     public void hideFontsliderView() {
-        changeFontsizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_down_faster));
-        changeFontsizeView.setVisibility(View.GONE);
+        changeFontSizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_down_faster));
+        changeFontSizeView.setVisibility(View.GONE);
     }
 
     private void animateContent()
@@ -256,6 +257,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         progressBar.setVisibility(View.GONE);
         contentView.setVisibility(View.GONE);
         errorView.setVisibility(View.VISIBLE);
+        errorView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
     }
 
     @Override
@@ -328,7 +330,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
             Snackbar.make(favoriteButton, R.string.saved_bookmark, Snackbar.LENGTH_SHORT).show();
             logPlaceBookmark(chapter);
         } else if (item.getItemId() == R.id.action_change_fontsize) {
-            if (changeFontsizeView.getVisibility() != View.VISIBLE) {
+            if (changeFontSizeView.getVisibility() != View.VISIBLE) {
                 showFontsliderView();
             }
         }
@@ -352,7 +354,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         FirebaseAnalytics.getInstance(getContext()).logEvent(PLACE_BOOKMARK, bundle);
     }
 
-    public RelativeLayout getChangeFontsizeView() {
-        return changeFontsizeView;
+    public RelativeLayout getChangeFontSizeView() {
+        return changeFontSizeView;
     }
 }
