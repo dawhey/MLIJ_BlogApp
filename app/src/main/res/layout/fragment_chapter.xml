@@ -148,6 +148,8 @@
                 android:layout_alignParentTop="true"
                 android:paddingStart="@dimen/alternative_padding"
                 android:max="10"
+                android:minHeight="@dimen/slider_height"
+                android:maxHeight="@dimen/slider_height"
                 android:layout_toStartOf="@+id/accept_font_size"
                 android:paddingEnd="@dimen/alternative_padding"
                 android:id="@+id/font_slider" />
