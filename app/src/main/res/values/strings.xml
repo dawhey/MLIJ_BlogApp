@@ -37,6 +37,10 @@
     <string name="search_by_title">Znajdź tytuł…</string>
     <string name="change_font_size">Zmień rozmiar czcionki</string>
     <string name="default_fontsize_changed">Domyślna czcionka została zmieniona</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="lorem_ipsum">Coś było nie tak. Czytając kolejne strony wciąż mrużyłeś oczy.\n
+- Cholera, a może by tak trochę to powiększyć? - Literki zwiększyły się odrobinę.\n
+- Może jednak trochę mniejsze, w końcu nie mam aż tylu lat… - Wciąż nie byłeś pewien.
+Jeszcze troszkę! Mniejsze? Większe? Tak. Idealnie. Teraz możesz już czytać.</string>
     <string name="daily_prophet">Prorok Codzienny</string>
+    <string name="preview">Podgląd</string>
 </resources>

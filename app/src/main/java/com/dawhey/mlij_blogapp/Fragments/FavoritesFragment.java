@@ -29,10 +29,12 @@ public class FavoritesFragment extends Fragment {
 
     private static final String TAG = "FavoritesFragment";
 
+    private Snackbar snackbar;
     private ChapterListAdapter favoriteListAdapter;
     private RecyclerView favoriteListView;
     private RelativeLayout noFavsView;
     private List<Chapter> favorites;
+    private Chapter queuedToDelete;
 
     @Nullable
     @Override
@@ -53,6 +55,7 @@ public class FavoritesFragment extends Fragment {
 
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                queuedToDelete = favorites.get(viewHolder.getAdapterPosition());
                 Snackbar snackbar = initializeRemoveSnackbar((ChapterListAdapter.ViewHolder) viewHolder, root);
                 snackbar.show();
             }
@@ -92,11 +95,12 @@ public class FavoritesFragment extends Fragment {
     private Snackbar initializeRemoveSnackbar(final ChapterListAdapter.ViewHolder vh, final View root) {
         final boolean[] delete = {true};
         String message = getString(R.string.Removed) + vh.chapterNumberView.getText() + getString(R.string.from_favorites);
-        Snackbar snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
+        snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 favoriteListAdapter.notifyItemChanged(vh.getAdapterPosition());
                 delete[0] = false;
+                queuedToDelete = null;
             }
         }).setActionTextColor(getResources().getColor(R.color.colorAccent));
 
@@ -104,11 +108,9 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 if (delete[0]) {
-                    Chapter chapterToDelete = favorites.get(vh.getAdapterPosition());
-                    PreferencesManager.getInstance(getContext()).removeFromFavorites(chapterToDelete);
+                    removeChapterFromFavorites(queuedToDelete);
                     favoriteListAdapter.notifyItemRemoved(vh.getAdapterPosition());
-                    favorites.remove(chapterToDelete);
-                    if (favorites.size() == 0) {
+                    if (favorites.size() == 0 && getContext() != null) {
                         showNoFavsView();
                     }
                 }
@@ -118,4 +120,20 @@ public class FavoritesFragment extends Fragment {
         return snackbar;
     }
 
+    private void removeChapterFromFavorites(Chapter chapter) {
+        PreferencesManager.getInstance(getContext()).removeFromFavorites(chapter);
+        favorites.remove(chapter);
+        queuedToDelete = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (queuedToDelete != null) {
+            removeChapterFromFavorites(queuedToDelete);
+            if (snackbar.isShown()) {
+                snackbar.dismiss();
+            }
+        }
+    }
 }
