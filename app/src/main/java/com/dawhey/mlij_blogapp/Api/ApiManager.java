@@ -4,6 +4,7 @@ import com.dawhey.mlij_blogapp.BuildConfig;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -17,6 +18,7 @@ public class ApiManager {
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
                     .baseUrl(BuildConfig.BLOGGER_API_BASE_URL)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create());
 
     public static BloggerService createBloggerService() {
