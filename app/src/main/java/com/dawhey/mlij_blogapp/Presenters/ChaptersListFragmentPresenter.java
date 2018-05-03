@@ -3,6 +3,7 @@ package com.dawhey.mlij_blogapp.Presenters;
 import android.content.Context;
 import android.util.Log;
 
+import com.dawhey.mlij_blogapp.Application;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
@@ -11,6 +12,7 @@ import com.dawhey.mlij_blogapp.Views.ChaptersListView;
 
 import java.util.List;
 
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -22,32 +24,28 @@ public class ChaptersListFragmentPresenter {
 
     private ChaptersListView view;
     private ChaptersRepository model;
-    private Context context;
-
+    private Scheduler mainScheduler;
     private CompositeDisposable disposables;
-    private PreferencesManager manager;
 
-    public ChaptersListFragmentPresenter(ChaptersListView view, ChaptersRepository model, Context context) {
+
+    public ChaptersListFragmentPresenter(ChaptersListView view, ChaptersRepository model, Scheduler mainScheduler) {
         this.view = view;
         this.model = model;
-        this.context = context;
-
+        this.mainScheduler = mainScheduler;
         disposables = new CompositeDisposable();
-        manager = PreferencesManager.getInstance(context);
     }
 
     public void loadChapters() {
         view.showLoading();
         disposables.add(model.getAllChapters()
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(mainScheduler)
                 .subscribeOn(Schedulers.io())
                 .subscribeWith(new DisposableSingleObserver<Posts>() {
+
             @Override
             public void onSuccess(Posts posts) {
                 List<Chapter> chapters = posts.getChapters();
-                if (manager.checkIfFirstRun()) {
-                    model.saveOldChapters(chapters);
-                }
+                model.saveOldChapters(chapters);
                 view.showChapters(chapters);
                 view.updateChapters(chapters);
             }

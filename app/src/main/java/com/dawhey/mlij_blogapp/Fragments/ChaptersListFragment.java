@@ -36,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by dawhey on 17.03.17.
@@ -71,7 +72,7 @@ public class ChaptersListFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Context context = getActivity().getApplicationContext();
-        presenter = new ChaptersListFragmentPresenter(this, new ChaptersRepositoryImpl(context), context);
+        presenter = new ChaptersListFragmentPresenter(this, new ChaptersRepositoryImpl(context), AndroidSchedulers.mainThread());
 
     }
 

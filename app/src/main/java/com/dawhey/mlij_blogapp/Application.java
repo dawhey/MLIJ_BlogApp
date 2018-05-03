@@ -1,5 +1,7 @@
 package com.dawhey.mlij_blogapp;
 
+import android.content.Context;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -8,9 +10,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class Application extends android.app.Application {
 
+    private static Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/alegreya.ttf")
                 .setFontAttrId(R.attr.fontPath)
@@ -18,5 +23,7 @@ public class Application extends android.app.Application {
         );
     }
 
-
+    public static Context getAppContext() {
+        return Application.context;
+    }
 }

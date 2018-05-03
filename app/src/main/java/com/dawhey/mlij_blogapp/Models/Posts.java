@@ -12,6 +12,10 @@ public class Posts {
     @Expose
     private List<Chapter> chapters = null;
 
+    public Posts(List<Chapter> chapters) {
+        this.chapters = chapters;
+    }
+
     public List<Chapter> getChapters() {
         return chapters;
     }

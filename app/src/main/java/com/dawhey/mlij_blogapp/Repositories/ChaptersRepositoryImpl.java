@@ -25,15 +25,21 @@ public class ChaptersRepositoryImpl implements ChaptersRepository {
 
     @Override
     public Single<Posts> getAllChapters() {
-        return bloggerService.listRepos();
+        try {
+            return bloggerService.listRepos();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
     public void saveOldChapters(final List<Chapter> chapters) {
-        List<String> chapterIds = new ArrayList<>();
-        for (Chapter c : chapters) {
-            chapterIds.add(c.getId());
+        if (manager.checkIfFirstRun()) {
+            List<String> chapterIds = new ArrayList<>();
+            for (Chapter c : chapters) {
+                chapterIds.add(c.getId());
+            }
+            manager.saveOldChapters(chapterIds);
         }
-        manager.saveOldChapters(chapterIds);
     }
 }
