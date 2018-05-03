@@ -41,7 +41,7 @@ public class PreferencesManager {
 
     public void setLastChapter(Chapter chapter) {
         String json = new Gson().toJson(chapter);
-        preferences.edit().putString(LAST_CHAPTER_KEY, json).commit();
+        preferences.edit().putString(LAST_CHAPTER_KEY, json).apply();
     }
 
     public Chapter getLastChapter() {
@@ -66,7 +66,7 @@ public class PreferencesManager {
 
     private void saveFavoriteChapters(List<Chapter> favorites) {
         String json = new Gson().toJson(favorites);
-        preferences.edit().putString(FAVORITES_KEY, json).commit();
+        preferences.edit().putString(FAVORITES_KEY, json).apply();
     }
 
     public boolean isInFavorites(Chapter chapter) {
@@ -109,7 +109,7 @@ public class PreferencesManager {
 
     public boolean checkIfFirstRun() {
         if (preferences.getBoolean(FIRST_RUN_KEY, true)) {
-            preferences.edit().putBoolean(FIRST_RUN_KEY, false).commit();
+            preferences.edit().putBoolean(FIRST_RUN_KEY, false).apply();
             return true;
         } else {
             return false;
@@ -129,7 +129,7 @@ public class PreferencesManager {
 
     public void saveOldChapters(List<String> oldChapters) {
         String json = new Gson().toJson(oldChapters);
-        preferences.edit().putString(OLD_CHAPTERS_KEY, json).commit();
+        preferences.edit().putString(OLD_CHAPTERS_KEY, json).apply();
     }
 
     public boolean isInOldChapters(String chapter) {
