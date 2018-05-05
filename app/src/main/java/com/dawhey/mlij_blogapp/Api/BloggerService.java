@@ -22,7 +22,7 @@ public interface BloggerService {
     Single<Posts> listRepos();
 
     @GET("posts/{id}?key=" + BuildConfig.BLOGGER_API_KEY + "&fields=id,url,published,title,content")
-    Call<Chapter> getChapter(@Path("id") String id);
+    Single<Chapter> getChapter(@Path("id") String id);
 
     @GET("pages/5695788482197599557?key=" + BuildConfig.BLOGGER_API_KEY)
     Call<BlogEntry> getProphetPage();

@@ -187,7 +187,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
 
     private void downloadChapterContent() {
         showLoadingView();
-        Call<Chapter> chapterCall = ApiManager.createBloggerService().getChapter(chapter.getId());
+        /*Call<Chapter> chapterCall = ApiManager.createBloggerService().getChapter(chapter.getId());
         chapterCall.enqueue(new Callback<Chapter>() {
             @Override
             public void onResponse(Call<Chapter> call, Response<Chapter> response) {
@@ -203,7 +203,7 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
                 showErrorView();
                 Log.e(TAG, t.getMessage());
             }
-        });
+        });*/
     }
 
     private void showLoadingView() {

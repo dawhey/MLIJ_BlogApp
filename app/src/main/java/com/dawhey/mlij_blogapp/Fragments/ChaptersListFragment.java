@@ -27,6 +27,7 @@ import com.dawhey.mlij_blogapp.Listeners.OnResultsFilteredListener;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
+import com.dawhey.mlij_blogapp.Models.Posts;
 import com.dawhey.mlij_blogapp.Presenters.ChaptersListFragmentPresenter;
 import com.dawhey.mlij_blogapp.R;
 import com.dawhey.mlij_blogapp.Repositories.ChaptersRepositoryImpl;
@@ -66,14 +67,13 @@ public class ChaptersListFragment extends Fragment implements
     private ChaptersTitleFilter filter;
     private ChapterListAdapter chapterListAdapter;
     private ChaptersListFragmentPresenter presenter;
-    private List<Chapter> chapters;
+    private Posts posts;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Context context = getActivity().getApplicationContext();
-        presenter = new ChaptersListFragmentPresenter(this, new ChaptersRepositoryImpl(context), AndroidSchedulers.mainThread());
-
+        presenter = new ChaptersListFragmentPresenter(new ChaptersRepositoryImpl(context), this, AndroidSchedulers.mainThread());
     }
 
     @Nullable
@@ -97,25 +97,26 @@ public class ChaptersListFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        if (chapters == null) {
-            presenter.loadChapters();
+        if (posts == null) {
+            presenter.loadContent();
         } else {
-            showChapters(chapters);
+            showContent(posts);
         }
     }
 
     @Override
     public void onRefresh() {
-        presenter.loadChapters();
+        presenter.loadContent();
     }
 
     /**
      * setting chapters list adapter and filter, then
      * showing chapters passed from presenter
-     * @param chapters to show
+     * @param posts to show
      */
     @Override
-    public void showChapters(List<Chapter> chapters) {
+    public void showContent(Posts posts) {
+        List<Chapter> chapters = posts.getChapters();
         errorView.setVisibility(View.GONE);
         swipeRefreshView.setRefreshing(false);
         chapterListAdapter.setPosts(chapters);
@@ -130,7 +131,7 @@ public class ChaptersListFragment extends Fragment implements
     @Override
     public void showError() {
         swipeRefreshView.setRefreshing(false);
-        if (chapters == null) {
+        if (posts == null) {
             errorView.setVisibility(View.VISIBLE);
             if (getContext() != null) {
                 errorView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
@@ -152,11 +153,11 @@ public class ChaptersListFragment extends Fragment implements
 
     /**
      * Method used to update chapters from presenter if downloaded
-     * @param chapters to update
+     * @param posts to update
      */
     @Override
-    public void updateChapters(List<Chapter> chapters) {
-        this.chapters = chapters;
+    public void updateChapters(Posts posts) {
+        this.posts = posts;
     }
 
     /**
@@ -165,6 +166,7 @@ public class ChaptersListFragment extends Fragment implements
      */
     @Override
     public void onChapterDownloaded(Chapter chapter) {
+        List<Chapter> chapters = posts.getChapters();
         for (Chapter c : chapters) {
             if (c.getId().equals(chapter.getId())) {
                 c.setContent(chapter.getContent());
@@ -213,7 +215,7 @@ public class ChaptersListFragment extends Fragment implements
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (chapters != null) {
+        if (posts != null) {
             filter.filter(newText);
         }
         return false;

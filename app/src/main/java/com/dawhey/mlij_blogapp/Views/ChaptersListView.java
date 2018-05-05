@@ -1,18 +1,10 @@
 package com.dawhey.mlij_blogapp.Views;
 
-import com.dawhey.mlij_blogapp.Models.Chapter;
+import com.dawhey.mlij_blogapp.Models.Posts;
 
-import java.util.List;
-
-public interface ChaptersListView {
-
-    void showChapters(List<Chapter> chapters);
-
-    void showError();
-
-    void showLoading();
+public interface ChaptersListView extends View<Posts> {
 
     void showNoChapters();
 
-    void updateChapters(List<Chapter> chapters);
+    void updateChapters(Posts posts);
 }
