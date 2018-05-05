@@ -12,4 +12,6 @@ public interface ChaptersRepository {
     Single<Posts> getAllChapters();
 
     void saveOldChapters(List<Chapter> chapters);
+
+    Single<Chapter> getChapter();
 }
