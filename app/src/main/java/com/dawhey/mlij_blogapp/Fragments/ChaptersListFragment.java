@@ -109,6 +109,11 @@ public class ChaptersListFragment extends Fragment implements
         presenter.loadChapters();
     }
 
+    /**
+     * setting chapters list adapter and filter, then
+     * showing chapters passed from presenter
+     * @param chapters to show
+     */
     @Override
     public void showChapters(List<Chapter> chapters) {
         errorView.setVisibility(View.GONE);

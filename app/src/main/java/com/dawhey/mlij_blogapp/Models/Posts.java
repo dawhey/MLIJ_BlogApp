@@ -10,7 +10,7 @@ public class Posts {
 
     @SerializedName("items")
     @Expose
-    private List<Chapter> chapters = null;
+    private List<Chapter> chapters;
 
     public Posts(List<Chapter> chapters) {
         this.chapters = chapters;

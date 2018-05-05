@@ -20,9 +20,7 @@ public class PreferencesManager {
     private static final String OLD_CHAPTERS_KEY = "oldChapters";
     private static final String FIRST_RUN_KEY = "firstRun";
     private static final String BOOKMARK_KEY = "bookmark";
-    private static final String FONTSIZE_KEY = "fontsize";
-
-
+    private static final String FONT_SIZE_KEY = "fontSize";
 
     private static PreferencesManager instance;
     private final SharedPreferences preferences;
@@ -155,7 +153,7 @@ public class PreferencesManager {
 
     public void saveBookmark(Bookmark bookmark) {
         String json = new Gson().toJson(bookmark);
-        preferences.edit().putString(BOOKMARK_KEY, json).commit();
+        preferences.edit().putString(BOOKMARK_KEY, json).apply();
     }
 
     public Bookmark getBookmark() {
@@ -169,10 +167,14 @@ public class PreferencesManager {
     }
 
     public int getChapterFontSize() {
-        return preferences.getInt(FONTSIZE_KEY, 19);
+        return preferences.getInt(FONT_SIZE_KEY, 19);
     }
 
+    /**
+     * Save user selected font size in chapter fragment
+     * @param fontSize selected by user
+     */
     public void setChapterFontSize(int fontSize) {
-        preferences.edit().putInt(FONTSIZE_KEY, fontSize).commit();
+        preferences.edit().putInt(FONT_SIZE_KEY, fontSize).apply();
     }
 }

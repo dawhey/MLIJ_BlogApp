@@ -25,11 +25,7 @@ public class ChaptersRepositoryImpl implements ChaptersRepository {
 
     @Override
     public Single<Posts> getAllChapters() {
-        try {
-            return bloggerService.listRepos();
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
+        return bloggerService.listRepos();
     }
 
     @Override

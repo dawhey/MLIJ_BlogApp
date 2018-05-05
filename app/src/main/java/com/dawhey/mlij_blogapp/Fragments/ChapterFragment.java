@@ -34,6 +34,9 @@ import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.util.Objects;
+
+import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,13 +63,41 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     private Chapter chapter;
 
     private OnChapterDownloadedListener listener;
+
+    @BindView(R.id.font_slider)
     private SeekBar fontSlider;
+
+    @BindView(R.id.accept_font_size)
     private ImageView changeFontButtonDone;
-    private RelativeLayout errorView, changeFontSizeView;
+
+    @BindView(R.id.error_chapter_view)
+    private RelativeLayout errorView;
+
+    @BindView(R.id.font_slider_view)
+    private RelativeLayout changeFontSizeView;
+
+    @BindView(R.id.text_scroll_view)
     private ScrollView scrollView;
+
+    @BindView(R.id.error_refresh_button)
     private FloatingActionButton refreshButton;
+
+    @BindView(R.id.chapter_progressbar)
     private ProgressBar progressBar;
-    private TextView contentView, titleView, displayFontSizeView;
+
+    @BindView(R.id.chapter_content_view)
+    private TextView contentView;
+
+    @BindView(R.id.display_font_size_text)
+    private TextView displayFontSizeView;
+
+    @BindView(R.id.chapter_title_view)
+    private TextView titleView;
+
+    @BindView(R.id.title_divider)
+    private View dividerLine;
+
+    @BindView(R.id.favorite_button)
     private FloatingActionButton favoriteButton;
 
     @Override
@@ -82,28 +113,16 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chapter, container, false);
         setHasOptionsMenu(true);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(chapter.getChapterHeaderFormatted());
-        initViews(root);
+        Objects.requireNonNull(((MainActivity) getActivity()).getSupportActionBar()).setTitle(chapter.getChapterHeaderFormatted());
+        initViews();
         initViewListeners();
         setFavoriteButton();
 
         return root;
     }
 
-    private void initViews(View root) {
-        titleView = (TextView) root.findViewById(R.id.chapter_title_view);
-        View dividerLine = root.findViewById(R.id.title_divider);
+    private void initViews() {
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
-        changeFontSizeView = (RelativeLayout) root.findViewById(R.id.font_slider_view);
-        fontSlider = (SeekBar) root.findViewById(R.id.font_slider);
-        changeFontButtonDone = (ImageView) root.findViewById(R.id.accept_font_size);
-        contentView = (TextView) root.findViewById(R.id.chapter_content_view);
-        errorView = (RelativeLayout) root.findViewById(R.id.error_chapter_view);
-        scrollView = (ScrollView) root.findViewById(R.id.text_scroll_view);
-        refreshButton = (FloatingActionButton) root.findViewById(R.id.error_refresh_button);
-        progressBar = (ProgressBar) root.findViewById(R.id.chapter_progressbar);
-        favoriteButton = (FloatingActionButton) root.findViewById(R.id.favorite_button);
-        displayFontSizeView = (TextView) root.findViewById(R.id.display_font_size_text);
         titleView.setText(chapter.getTitleFormatted());
         contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         displayFontSizeView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
