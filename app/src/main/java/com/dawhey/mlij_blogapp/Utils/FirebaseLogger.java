@@ -8,6 +8,10 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class FirebaseLogger {
 
+    private static final String CONTENT_TYPE_CHAPTER = "chapter";
+    private static final String EVENT_FAVORITE = "Favorite";
+    private static final String EVENT_PLACE_BOOKMARK = "Bookmark";
+
     private static FirebaseLogger singleton;
     private Context context;
 
@@ -21,10 +25,6 @@ public class FirebaseLogger {
         }
         return singleton;
     }
-
-    private static final String CONTENT_TYPE_CHAPTER = "chapter";
-    private static final String EVENT_FAVORITE = "Favorite";
-    private static final String EVENT_PLACE_BOOKMARK = "Bookmark";
 
     public void logAddingToFavoritesEvent(Chapter chapter) {
         FirebaseAnalytics.getInstance(context).logEvent(EVENT_FAVORITE, setupBundle(chapter));

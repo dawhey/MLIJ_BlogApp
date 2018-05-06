@@ -19,9 +19,4 @@ public class Posts {
     public List<Chapter> getChapters() {
         return chapters;
     }
-
-    public void setChapters(List<Chapter> chapters) {
-        this.chapters = chapters;
-    }
-
 }

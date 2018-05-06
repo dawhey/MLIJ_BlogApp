@@ -35,5 +35,5 @@ public interface ChaptersRepository {
 
     Chapter getLastChapter();
 
-
+    List<Chapter> getFavoriteChapters();
 }

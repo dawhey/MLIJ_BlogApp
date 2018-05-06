@@ -81,6 +81,11 @@ public class ChaptersRepositoryImpl implements ChaptersRepository {
     }
 
     @Override
+    public List<Chapter> getFavoriteChapters() {
+        return manager.getFavoriteChapters();
+    }
+
+    @Override
     public void saveOldChapters(final Posts posts) {
         List<Chapter> chapters = posts.getChapters();
         if (manager.checkIfFirstRun()) {
