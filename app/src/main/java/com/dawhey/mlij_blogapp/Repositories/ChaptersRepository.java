@@ -1,5 +1,6 @@
 package com.dawhey.mlij_blogapp.Repositories;
 
+import com.dawhey.mlij_blogapp.Models.BlogEntry;
 import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
@@ -12,9 +13,11 @@ public interface ChaptersRepository {
 
     Single<Posts> getAllChapters();
 
-    void saveOldChapters(Posts posts);
+    Single<BlogEntry> getProphetPage();
 
     Single<Chapter> getChapter(String id);
+
+    void saveOldChapters(Posts posts);
 
     boolean isInFavorites(Chapter chapter);
 
@@ -31,4 +34,6 @@ public interface ChaptersRepository {
     Bookmark getBookmark();
 
     Chapter getLastChapter();
+
+
 }

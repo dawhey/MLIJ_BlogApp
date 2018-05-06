@@ -25,5 +25,5 @@ public interface BloggerService {
     Single<Chapter> getChapter(@Path("id") String id);
 
     @GET("pages/5695788482197599557?key=" + BuildConfig.BLOGGER_API_KEY)
-    Call<BlogEntry> getProphetPage();
+    Single<BlogEntry> getProphetPage();
 }

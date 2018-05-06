@@ -31,4 +31,5 @@
     <dimen name="doubled_padding">48dp</dimen>
     <dimen name="slider_button">40dp</dimen>
     <dimen name="slider_height">70dp</dimen>
+    <dimen name="about_www_icon_size">80dp</dimen>
 </resources>

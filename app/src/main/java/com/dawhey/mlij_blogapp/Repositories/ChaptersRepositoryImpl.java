@@ -5,6 +5,7 @@ import android.content.Context;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
 import com.dawhey.mlij_blogapp.Api.BloggerService;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
+import com.dawhey.mlij_blogapp.Models.BlogEntry;
 import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
@@ -27,6 +28,11 @@ public class ChaptersRepositoryImpl implements ChaptersRepository {
     @Override
     public Single<Posts> getAllChapters() {
         return bloggerService.listRepos();
+    }
+
+    @Override
+    public Single<BlogEntry> getProphetPage() {
+        return bloggerService.getProphetPage();
     }
 
     @Override
