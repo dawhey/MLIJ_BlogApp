@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -26,282 +24,183 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
-import com.dawhey.mlij_blogapp.Api.ApiManager;
+import com.dawhey.mlij_blogapp.Listeners.OnChangeFontSizeListener;
 import com.dawhey.mlij_blogapp.Listeners.OnChapterDownloadedListener;
+import com.dawhey.mlij_blogapp.Listeners.OnChapterScrollListener;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
-import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
+import com.dawhey.mlij_blogapp.Presenters.ChapterFragmentPresenter;
 import com.dawhey.mlij_blogapp.R;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.dawhey.mlij_blogapp.Repositories.ChaptersRepositoryImpl;
+import com.dawhey.mlij_blogapp.Views.ChapterView;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import static com.dawhey.mlij_blogapp.Listeners.OnChapterScrollListener.CONTENT_BEGINNING;
 
 /**
  * Created by dawhey on 18.03.17.
  */
 
-public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScrollChangedListener{
+public class ChapterFragment extends Fragment implements
+       ChapterView {
 
-    private static final int SLIDER_FONT_OFFSET = 15;
-    private static final int CONTENT_BEGINNING = 0;
-
-    private static final String FAVORITE = "Favorite";
-    private static final String PLACE_BOOKMARK = "Bookmark";
+    public static final int SLIDER_FONT_OFFSET = 15;
     private static final String FIRST_VISIBLE_CHAR_KEY = "firstVisibleChar";
-    private static final String TAG = "ChapterFragment";
 
-    private int scrollPosition = 0;
-    private int fontSize = 0;
-    private int changedFontSize = 0;
-
-    private boolean openedFromBookmark;
     private Chapter chapter;
+    private boolean openedFromBookmark;
 
-    private OnChapterDownloadedListener listener;
-    private SeekBar fontSlider;
-    private ImageView changeFontButtonDone;
-    private RelativeLayout errorView, changeFontSizeView;
-    private ScrollView scrollView;
-    private FloatingActionButton refreshButton;
-    private ProgressBar progressBar;
-    private TextView contentView, titleView, displayFontSizeView;
-    private FloatingActionButton favoriteButton;
+    private PreferencesManager preferencesManager;
+    private ChapterFragmentPresenter presenter;
+    private OnChapterDownloadedListener downloadedListener;
+    private OnChangeFontSizeListener fontSizeListener;
+
+    @BindView(R.id.font_slider)
+    SeekBar fontSlider;
+
+    @BindView(R.id.accept_font_size)
+    ImageView changeFontButtonDone;
+
+    @BindView(R.id.error_chapter_view)
+    RelativeLayout errorView;
+
+    @BindView(R.id.font_slider_view)
+    RelativeLayout changeFontSizeView;
+
+    @BindView(R.id.text_scroll_view)
+    ScrollView scrollView;
+
+    @BindView(R.id.error_refresh_button)
+    FloatingActionButton refreshButton;
+
+    @BindView(R.id.chapter_progressbar)
+    ProgressBar progressBar;
+
+    @BindView(R.id.chapter_content_view)
+    TextView contentView;
+
+    @BindView(R.id.display_font_size_text)
+    TextView displayFontSizeView;
+
+    @BindView(R.id.chapter_title_view)
+    TextView titleView;
+
+    @BindView(R.id.title_divider)
+    View dividerLine;
+
+    @BindView(R.id.favorite_button)
+    FloatingActionButton favoriteButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        chapter = PreferencesManager.getInstance(getContext()).getLastChapter();
-        fontSize = PreferencesManager.getInstance(getContext()).getChapterFontSize();
-        changedFontSize = fontSize;
+        preferencesManager = PreferencesManager.getInstance(getContext());
+        presenter = new ChapterFragmentPresenter(new ChaptersRepositoryImpl(getContext()), this, AndroidSchedulers.mainThread(), downloadedListener);
+        chapter = presenter.getLastChapter();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chapter, container, false);
+        ButterKnife.bind(this, root);
         setHasOptionsMenu(true);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(chapter.getChapterHeaderFormatted());
-        initViews(root);
-        initViewListeners();
-        setFavoriteButton();
-
+        Objects.requireNonNull(((MainActivity) getActivity()).getSupportActionBar()).setTitle(chapter.getChapterHeaderFormatted());
+        initViews();
         return root;
     }
 
-    private void initViews(View root) {
-        titleView = (TextView) root.findViewById(R.id.chapter_title_view);
-        View dividerLine = root.findViewById(R.id.title_divider);
+    private void initViews() {
+        int fontSize = preferencesManager.getChapterFontSize();
+
+        //views
         dividerLine.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in));
-        changeFontSizeView = (RelativeLayout) root.findViewById(R.id.font_slider_view);
-        fontSlider = (SeekBar) root.findViewById(R.id.font_slider);
-        changeFontButtonDone = (ImageView) root.findViewById(R.id.accept_font_size);
-        contentView = (TextView) root.findViewById(R.id.chapter_content_view);
-        errorView = (RelativeLayout) root.findViewById(R.id.error_chapter_view);
-        scrollView = (ScrollView) root.findViewById(R.id.text_scroll_view);
-        refreshButton = (FloatingActionButton) root.findViewById(R.id.error_refresh_button);
-        progressBar = (ProgressBar) root.findViewById(R.id.chapter_progressbar);
-        favoriteButton = (FloatingActionButton) root.findViewById(R.id.favorite_button);
-        displayFontSizeView = (TextView) root.findViewById(R.id.display_font_size_text);
         titleView.setText(chapter.getTitleFormatted());
         contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         displayFontSizeView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         fontSlider.setProgress(fontSize - SLIDER_FONT_OFFSET);
+        presenter.setupFavoriteButton(chapter);
+
+        //listeners
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new OnChapterScrollListener(favoriteButton, scrollView));
+        fontSizeListener = new OnChangeFontSizeListener(this, displayFontSizeView, fontSize);
+        fontSlider.setOnSeekBarChangeListener(fontSizeListener);
     }
 
-    private void initViewListeners() {
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(this);
 
-        changeFontButtonDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (changedFontSize != fontSize) {
-                    contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, changedFontSize);
-                    PreferencesManager.getInstance(getContext()).setChapterFontSize(changedFontSize);
-                    Snackbar.make(favoriteButton, R.string.default_fontsize_changed, Snackbar.LENGTH_LONG).show();
-                    fontSize = changedFontSize;
-                }
-                hideFontsliderView();
-            }
-        });
+    @OnClick(R.id.accept_font_size)
+    public void  onChangeFontButtonClick() {
+       presenter.changeFontSize(fontSizeListener);
+    }
 
-        fontSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                changedFontSize = SLIDER_FONT_OFFSET + i;
-                displayFontSizeView.setTextSize(TypedValue.COMPLEX_UNIT_SP, changedFontSize);
-            }
+    @OnClick(R.id.error_refresh_button)
+    public void onRefreshButtonClick() {
+        presenter.loadContent();
+    }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                downloadChapterContent();
-            }
-        });
-
-        favoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PreferencesManager manager = PreferencesManager.getInstance(getContext());
-                favoriteButton.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
-                if (manager.isInFavorites(chapter)) {
-                    manager.removeFromFavorites(chapter);
-                    favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.textDefault)));
-                    Snackbar.make(favoriteButton, R.string.deleted_from_favorites_message, Snackbar.LENGTH_SHORT).show();
-                } else {
-                    manager.addToFavorites(chapter);
-                    favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                    Snackbar.make(favoriteButton, R.string.added_to_favorites_message, Snackbar.LENGTH_SHORT).show();
-                    logAddingToFavoritesEvent(chapter);
-                }
-            }
-        });
+    @OnClick(R.id.favorite_button)
+    public void onFavoriteButtonClick() {
+        favoriteButton.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
+        presenter.handleFavoriteClick(chapter, getContext());
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        chapter = preferencesManager.getLastChapter();
         if (chapter.getContent() == null) {
-            downloadChapterContent();
+            presenter.loadContent();
         } else {
-            contentView.setText(Html.fromHtml(chapter.getContent()));
-            showContentView();
+            showContent(chapter);
         }
-    }
-
-    private void downloadChapterContent() {
-        showLoadingView();
-        Call<Chapter> chapterCall = ApiManager.createBloggerService().getChapter(chapter.getId());
-        chapterCall.enqueue(new Callback<Chapter>() {
-            @Override
-            public void onResponse(Call<Chapter> call, Response<Chapter> response) {
-                chapter = response.body();
-                listener.onChapterDownloaded(chapter);
-                PreferencesManager.getInstance(getContext()).setLastChapter(chapter);
-                contentView.setText(Html.fromHtml(chapter.getContent()));
-                showContentView();
-            }
-
-            @Override
-            public void onFailure(Call<Chapter> call, Throwable t) {
-                showErrorView();
-                Log.e(TAG, t.getMessage());
-            }
-        });
-    }
-
-    private void showLoadingView() {
-        contentView.setVisibility(View.GONE);
-        errorView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
-    }
-
-    private void showContentView() {
-        progressBar.setVisibility(View.GONE);
-        errorView.setVisibility(View.GONE);
-        contentView.setVisibility(View.VISIBLE);
-        favoriteButton.show();
-        animateContent();
-
-        if (openedFromBookmark) {
-            Bookmark bookmark = PreferencesManager.getInstance(getContext()).getBookmark();
-            scrollToPixelOffset(bookmark.getPosition());
-            Snackbar.make(favoriteButton, R.string.opened_from_bookmark, Snackbar.LENGTH_SHORT).show();
-            openedFromBookmark = false;
-        }
-    }
-
-    private void showFontsliderView() {
-        changeFontSizeView.setVisibility(View.VISIBLE);
-        changeFontSizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
-    }
-
-    public void hideFontsliderView() {
-        changeFontSizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_down_faster));
-        changeFontSizeView.setVisibility(View.GONE);
-    }
-
-    private void animateContent()
-    {
-        if (getContext() != null) {
-            Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
-            a.reset();
-            contentView.clearAnimation();
-            contentView.startAnimation(a);
-            favoriteButton.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
-        }
-    }
-
-    private void setFavoriteButton() {
-        if (PreferencesManager.getInstance(getContext()).isInFavorites(chapter)) {
-            favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-        } else {
-            favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.textDefault)));
-        }
-    }
-
-    private void showErrorView() {
-        progressBar.setVisibility(View.GONE);
-        contentView.setVisibility(View.GONE);
-        errorView.setVisibility(View.VISIBLE);
-        errorView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
     }
 
     @Override
-    public void onScrollChanged() {
-        int newScrollPosition = scrollView.getScrollY();
-        if (newScrollPosition > CONTENT_BEGINNING && newScrollPosition > scrollPosition) {
-            favoriteButton.hide();
-        } else {
-            favoriteButton.show();
-        }
-        scrollPosition = newScrollPosition;
+    public void onPause() {
+        super.onPause();
+        presenter.unsubscribe();
     }
 
+    /**
+     * Sets listener which gets notified if Chapter was downloaded
+     * so the listener can cache it
+     * @param listener to notify
+     */
     public void setOnChapterDownloadedListener(OnChapterDownloadedListener listener) {
-        this.listener = listener;
+        this.downloadedListener = listener;
     }
 
+    public void setOpenedFromBookmark(boolean openedFromBookmark) {
+       this.openedFromBookmark = openedFromBookmark;
+    }
+
+    @Override
     public boolean isOpenedFromBookmark() {
         return openedFromBookmark;
     }
 
-    public void setOpenedFromBookmark(boolean openedFromBookmark) {
-        this.openedFromBookmark = openedFromBookmark;
-    }
-
+    /**
+     * Checks if scroll offset variable was saved
+     * @param savedInstanceState bundle
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            final int firstVisibleCharacterOffset = savedInstanceState.getInt(FIRST_VISIBLE_CHAR_KEY);
-            scrollToPixelOffset(firstVisibleCharacterOffset);
+            presenter.setFirstVisibleCharacterOffset(savedInstanceState.getInt(FIRST_VISIBLE_CHAR_KEY));
         }
     }
 
-    private void scrollToPixelOffset(final int firstVisibleCharacterOffset) {
-        scrollView.post(new Runnable() {
-            public void run() {
-                final int firstVisibleLineOffset = contentView.getLayout().getLineForOffset(firstVisibleCharacterOffset);
-                final int pixelOffset = contentView.getLayout().getLineTop(firstVisibleLineOffset);
-                scrollView.scrollTo(CONTENT_BEGINNING, pixelOffset);
-            }
-        });
-    }
-
+    /**
+     * scroll offset is saved
+     * @param outState containing scroll offset
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -311,6 +210,11 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         }
     }
 
+    /**
+     * get scroll offset for first line visible, so in orientation change
+     * user can continue reading where he left
+     * @return scroll offset
+     */
     private int getFirstVisibleCharacterOffset() {
         final int firstVisibleLineOffset = contentView.getLayout().getLineForVertical(scrollView.getScrollY());
         return contentView.getLayout().getLineStart(firstVisibleLineOffset);
@@ -322,39 +226,103 @@ public class ChapterFragment extends Fragment implements ViewTreeObserver.OnScro
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * Add bookmark to chapter or
+     * Show view where you can change default font size
+     * @param item which was pressed
+     * @return false
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_last_read) {
-            Bookmark bookmark = new Bookmark(getFirstVisibleCharacterOffset(), chapter);
-            PreferencesManager.getInstance(getContext()).saveBookmark(bookmark);
-            Snackbar.make(favoriteButton, R.string.saved_bookmark, Snackbar.LENGTH_SHORT).show();
-            logPlaceBookmark(chapter);
-        } else if (item.getItemId() == R.id.action_change_fontsize) {
-            if (changeFontSizeView.getVisibility() != View.VISIBLE) {
-                showFontsliderView();
-            }
+            presenter.saveBookmark(chapter, getContext(), getFirstVisibleCharacterOffset());
+        } else if (item.getItemId() == R.id.action_change_fontsize && changeFontSizeView.getVisibility() != View.VISIBLE) {
+            showFontSliderView();
         }
-
         return false;
-    }
-
-    private void logAddingToFavoritesEvent(Chapter chapter) {
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, chapter.getId());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, chapter.getTitle());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.chapter));
-        FirebaseAnalytics.getInstance(getContext()).logEvent(FAVORITE, bundle);
-    }
-
-    private void logPlaceBookmark(Chapter chapter) {
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, chapter.getId());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, chapter.getTitle());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.chapter));
-        FirebaseAnalytics.getInstance(getContext()).logEvent(PLACE_BOOKMARK, bundle);
     }
 
     public RelativeLayout getChangeFontSizeView() {
         return changeFontSizeView;
+    }
+
+    public void setChangedFontSize(int fontSize) {
+        fontSizeListener.setChangedFontSize(fontSize);
+    }
+
+    @Override
+    public void showContent(Chapter content) {
+        contentView.setText(Html.fromHtml(content.getContent()));
+        progressBar.setVisibility(View.GONE);
+        errorView.setVisibility(View.GONE);
+        contentView.setVisibility(View.VISIBLE);
+        favoriteButton.show();
+        animateContent();
+    }
+
+    private void animateContent() {
+        if (getContext() != null) {
+            Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+            a.reset();
+            contentView.clearAnimation();
+            contentView.startAnimation(a);
+            favoriteButton.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
+        }
+    }
+
+    @Override
+    public void showError() {
+        progressBar.setVisibility(View.GONE);
+        contentView.setVisibility(View.GONE);
+        errorView.setVisibility(View.VISIBLE);
+        errorView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
+    }
+
+    @Override
+    public void showLoading() {
+        contentView.setVisibility(View.GONE);
+        errorView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_faster));
+    }
+
+
+    @Override
+    public void showFontSliderView() {
+        changeFontSizeView.setVisibility(View.VISIBLE);
+        changeFontSizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up_faster));
+    }
+
+    @Override
+    public void hideFontSliderView() {
+        changeFontSizeView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_down_faster));
+        changeFontSizeView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void updateFontSize(int fontSize) {
+        contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+    }
+
+    @Override
+    public void showSnackbar(int message, int length) {
+        Snackbar.make(favoriteButton, message, length).show();
+    }
+
+    @Override
+    public void updateFavoriteButton(int color) {
+        favoriteButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(color)));
+    }
+
+
+    @Override
+    public void scrollToPixelOffset(final int firstVisibleCharacterOffset) {
+        scrollView.post(new Runnable() {
+            public void run() {
+                final int firstVisibleLineOffset = contentView.getLayout().getLineForOffset(firstVisibleCharacterOffset);
+                final int pixelOffset = contentView.getLayout().getLineTop(firstVisibleLineOffset);
+                scrollView.scrollTo(CONTENT_BEGINNING, pixelOffset);
+            }
+        });
     }
 }

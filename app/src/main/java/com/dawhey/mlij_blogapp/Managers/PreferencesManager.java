@@ -20,9 +20,7 @@ public class PreferencesManager {
     private static final String OLD_CHAPTERS_KEY = "oldChapters";
     private static final String FIRST_RUN_KEY = "firstRun";
     private static final String BOOKMARK_KEY = "bookmark";
-    private static final String FONTSIZE_KEY = "fontsize";
-
-
+    private static final String FONT_SIZE_KEY = "fontSize";
 
     private static PreferencesManager instance;
     private final SharedPreferences preferences;
@@ -41,7 +39,7 @@ public class PreferencesManager {
 
     public void setLastChapter(Chapter chapter) {
         String json = new Gson().toJson(chapter);
-        preferences.edit().putString(LAST_CHAPTER_KEY, json).commit();
+        preferences.edit().putString(LAST_CHAPTER_KEY, json).apply();
     }
 
     public Chapter getLastChapter() {
@@ -66,7 +64,7 @@ public class PreferencesManager {
 
     private void saveFavoriteChapters(List<Chapter> favorites) {
         String json = new Gson().toJson(favorites);
-        preferences.edit().putString(FAVORITES_KEY, json).commit();
+        preferences.edit().putString(FAVORITES_KEY, json).apply();
     }
 
     public boolean isInFavorites(Chapter chapter) {
@@ -109,7 +107,7 @@ public class PreferencesManager {
 
     public boolean checkIfFirstRun() {
         if (preferences.getBoolean(FIRST_RUN_KEY, true)) {
-            preferences.edit().putBoolean(FIRST_RUN_KEY, false).commit();
+            preferences.edit().putBoolean(FIRST_RUN_KEY, false).apply();
             return true;
         } else {
             return false;
@@ -129,7 +127,7 @@ public class PreferencesManager {
 
     public void saveOldChapters(List<String> oldChapters) {
         String json = new Gson().toJson(oldChapters);
-        preferences.edit().putString(OLD_CHAPTERS_KEY, json).commit();
+        preferences.edit().putString(OLD_CHAPTERS_KEY, json).apply();
     }
 
     public boolean isInOldChapters(String chapter) {
@@ -155,7 +153,7 @@ public class PreferencesManager {
 
     public void saveBookmark(Bookmark bookmark) {
         String json = new Gson().toJson(bookmark);
-        preferences.edit().putString(BOOKMARK_KEY, json).commit();
+        preferences.edit().putString(BOOKMARK_KEY, json).apply();
     }
 
     public Bookmark getBookmark() {
@@ -169,10 +167,14 @@ public class PreferencesManager {
     }
 
     public int getChapterFontSize() {
-        return preferences.getInt(FONTSIZE_KEY, 19);
+        return preferences.getInt(FONT_SIZE_KEY, 19);
     }
 
+    /**
+     * Save user selected font size in chapter fragment
+     * @param fontSize selected by user
+     */
     public void setChapterFontSize(int fontSize) {
-        preferences.edit().putInt(FONTSIZE_KEY, fontSize).commit();
+        preferences.edit().putInt(FONT_SIZE_KEY, fontSize).apply();
     }
 }

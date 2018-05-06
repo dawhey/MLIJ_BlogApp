@@ -47,8 +47,8 @@
                 android:id="@+id/website_ref">
 
                 <ImageView
-                    android:layout_width="@dimen/about_icon_size"
-                    android:layout_height="@dimen/about_icon_size"
+                    android:layout_width="@dimen/about_www_icon_size"
+                    android:layout_height="@dimen/about_www_icon_size"
                     android:id="@+id/website_icon"
                     android:clickable="true"
                     android:background="?selectableItemBackgroundBorderless"
