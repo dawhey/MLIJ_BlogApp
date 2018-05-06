@@ -7,7 +7,7 @@ import com.dawhey.mlij_blogapp.Views.ChaptersListView;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 
-public class ChaptersListFragmentPresenter extends Presenter<ChaptersListView, Posts> {
+public class ChaptersListFragmentPresenter extends LcePresenter<ChaptersListView, Posts> {
 
 
     public ChaptersListFragmentPresenter(ChaptersRepository model, ChaptersListView view, Scheduler mainScheduler) {

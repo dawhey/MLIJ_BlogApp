@@ -17,7 +17,7 @@ import com.dawhey.mlij_blogapp.Views.ChapterView;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 
-public class ChapterFragmentPresenter extends Presenter<ChapterView, Chapter> {
+public class ChapterFragmentPresenter extends LcePresenter<ChapterView, Chapter> {
 
     private String chapterId;
     private OnChapterDownloadedListener listener;

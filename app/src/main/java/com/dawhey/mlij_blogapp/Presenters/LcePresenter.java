@@ -11,7 +11,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class Presenter<V extends View, T> {
+public abstract class LcePresenter<V extends View, T> {
 
     protected ChaptersRepository model;
     protected V view;
@@ -20,7 +20,7 @@ public abstract class Presenter<V extends View, T> {
     private CompositeDisposable disposables;
 
 
-    Presenter(ChaptersRepository model, V view, Scheduler mainScheduler) {
+    LcePresenter(ChaptersRepository model, V view, Scheduler mainScheduler) {
         this.model = model;
         this.view = view;
         this.mainScheduler = mainScheduler;
@@ -36,12 +36,12 @@ public abstract class Presenter<V extends View, T> {
 
                     @Override
                     public void onSuccess(T t) {
-                        Presenter.this.onSuccess(t);
+                        LcePresenter.this.onSuccess(t);
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
-                        Presenter.this.onError(throwable);
+                        LcePresenter.this.onError(throwable);
                     }
                 }));
     }

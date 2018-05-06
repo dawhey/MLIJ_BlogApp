@@ -38,7 +38,7 @@ public class ChaptersListFragmentPresenterTest {
 
     @Before
     public void setUp() {
-        presenter = new ChaptersListFragmentPresenter(chaptersListView, chaptersRepository, Schedulers.trampoline());
+        presenter = new ChaptersListFragmentPresenter(chaptersRepository, chaptersListView, Schedulers.trampoline());
 
         RxJavaPlugins.setIoSchedulerHandler(new Function<Scheduler, Scheduler>() {
             @Override
@@ -52,16 +52,16 @@ public class ChaptersListFragmentPresenterTest {
     public void shouldDisplayChaptersView() {
         when(chaptersRepository.getAllChapters()).thenReturn((Single.just(someElements)));
 
-        presenter.loadChapters();
+        presenter.loadContent();
 
-        verify(chaptersListView).showChapters(someElements.getChapters());
-        verify(chaptersListView).updateChapters(someElements.getChapters());
+        verify(chaptersListView).showContent(someElements);
+        verify(chaptersListView).updateChapters(someElements);
     }
 
     @Test
     public void shouldDisplayErrorView() {
         when(chaptersRepository.getAllChapters()).thenReturn(Single.<Posts>error(new Throwable("Error")));
-        presenter.loadChapters();
+        presenter.loadContent();
 
         verify(chaptersListView).showError();
     }
