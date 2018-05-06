@@ -13,9 +13,14 @@ public class OnChangeFontSizeListener implements SeekBar.OnSeekBarChangeListener
     private ChapterFragment fragment;
     private TextView displayFontSizeView;
 
-    public OnChangeFontSizeListener(ChapterFragment fragment, TextView displayFontSizeView) {
+    private int fontSize;
+    private int changedFontSize;
+
+    public OnChangeFontSizeListener(ChapterFragment fragment, TextView displayFontSizeView, int fontSize) {
         this.fragment = fragment;
         this.displayFontSizeView = displayFontSizeView;
+        this.fontSize = fontSize;
+        changedFontSize = fontSize;
     }
 
     @Override
@@ -33,5 +38,21 @@ public class OnChangeFontSizeListener implements SeekBar.OnSeekBarChangeListener
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    public int getChangedFontSize() {
+        return changedFontSize;
+    }
+
+    public void setChangedFontSize(int changedFontSize) {
+        this.changedFontSize = changedFontSize;
+    }
+
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
     }
 }

@@ -1,5 +1,6 @@
 package com.dawhey.mlij_blogapp.Repositories;
 
+import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 
@@ -14,4 +15,20 @@ public interface ChaptersRepository {
     void saveOldChapters(Posts posts);
 
     Single<Chapter> getChapter(String id);
+
+    boolean isInFavorites(Chapter chapter);
+
+    void addToFavorites(Chapter chapter);
+
+    void removeFromFavorites(Chapter chapter);
+
+    void saveBookmark(Bookmark bookmark);
+
+    void setChapterFontSize(int changedFontSize);
+
+    void setLastChapter(Chapter chapter);
+
+    Bookmark getBookmark();
+
+    Chapter getLastChapter();
 }

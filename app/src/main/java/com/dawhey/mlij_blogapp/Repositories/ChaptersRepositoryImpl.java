@@ -5,6 +5,7 @@ import android.content.Context;
 import com.dawhey.mlij_blogapp.Api.ApiManager;
 import com.dawhey.mlij_blogapp.Api.BloggerService;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
+import com.dawhey.mlij_blogapp.Models.Bookmark;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.Models.Posts;
 
@@ -31,6 +32,46 @@ public class ChaptersRepositoryImpl implements ChaptersRepository {
     @Override
     public Single<Chapter> getChapter(String id) {
         return bloggerService.getChapter(id);
+    }
+
+    @Override
+    public boolean isInFavorites(Chapter chapter) {
+        return manager.isInFavorites(chapter);
+    }
+
+    @Override
+    public void addToFavorites(Chapter chapter) {
+        manager.addToFavorites(chapter);
+    }
+
+    @Override
+    public void removeFromFavorites(Chapter chapter) {
+        manager.removeFromFavorites(chapter);
+    }
+
+    @Override
+    public void saveBookmark(Bookmark bookmark) {
+        manager.saveBookmark(bookmark);
+    }
+
+    @Override
+    public void setChapterFontSize(int fontSize) {
+        manager.setChapterFontSize(fontSize);
+    }
+
+    @Override
+    public void setLastChapter(Chapter chapter) {
+        manager.setLastChapter(chapter);
+    }
+
+    @Override
+    public Bookmark getBookmark() {
+        return manager.getBookmark();
+    }
+
+    @Override
+    public Chapter getLastChapter() {
+        return manager.getLastChapter();
     }
 
     @Override
