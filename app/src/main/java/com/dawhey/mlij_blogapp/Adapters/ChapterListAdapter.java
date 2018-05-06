@@ -3,7 +3,6 @@ package com.dawhey.mlij_blogapp.Adapters;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -16,29 +15,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Filters.ChaptersTitleFilter;
 import com.dawhey.mlij_blogapp.Fragments.ChapterFragment;
 import com.dawhey.mlij_blogapp.Fragments.ChaptersListFragment;
-import com.dawhey.mlij_blogapp.Listeners.OnChapterClickListener;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
 import com.dawhey.mlij_blogapp.Transitions.DetailsTransition;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.List;
 
 /**
  * Created by dawhey on 17.03.17.
  */
-public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ViewHolder> implements Filterable {
+public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListViewHolder> implements Filterable {
 
     private List<Chapter> posts;
-    private OnChapterClickListener listener;
     private Context context;
     private Fragment callingFragment;
     private List<Chapter> favorites;
@@ -50,18 +44,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private ColorStateList regularTint;
     private ColorStateList favoriteTint;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView chapterTitleView, chapterNumberView, chapterNewView;
-        public ImageView favoriteIconView;
 
-        ViewHolder(View v) {
-            super(v);
-            chapterTitleView = (TextView) v.findViewById(R.id.chapter_title_view);
-            chapterNumberView = (TextView) v.findViewById(R.id.chapter_number_view);
-            favoriteIconView = (ImageView) v.findViewById(R.id.chapter_favourites_icon);
-            chapterNewView = (TextView) v.findViewById(R.id.chapter_new_label);
-        }
-    }
 
     public ChapterListAdapter(Context context, Fragment fragment) {
         this.context = context;
@@ -71,10 +54,6 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
         regularTint = ColorStateList.valueOf(context.getResources().getColor(R.color.grayBright));
         favoriteTint = ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent));
-    }
-
-    public void setOnChapterClickListener(OnChapterClickListener fragment) {
-        listener = fragment;
     }
 
     public void setPosts(List<Chapter> posts) {
@@ -90,22 +69,15 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     @Override
-    public ChapterListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
+    public ChapterListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item, parent, false);
-        return new ViewHolder(v);
+        return new ChapterListViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ChapterListViewHolder holder, final int position) {
         Chapter post = posts.get(position);
-
-        if (queryText != null && !queryText.isEmpty()) {
-            holder.chapterTitleView.setText(getSpannableFromQuery(queryText, post.getTitleFormatted()));
-        } else {
-            holder.chapterTitleView.setText(post.getTitleFormatted());
-        }
-
+        handleSearchQuery(holder, post);
         holder.chapterNumberView.setText(post.getChapterHeaderFormatted());
         holder.favoriteIconView.setImageTintList(favorites.contains(post) ? favoriteTint : regularTint);
         holder.chapterNewView.setVisibility(!preferencesManager.isInOldChapters(post.getId()) ? View.VISIBLE : View.INVISIBLE);
@@ -117,18 +89,28 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 handleClick(holder);
             }
         });
-
     }
 
-    private void handleClick(ViewHolder holder) {
-        Chapter clicked = posts.get(holder.getAdapterPosition());
-        if (listener != null) {
-            listener.onChapterItemClick(clicked, holder);
+    private void handleSearchQuery(ChapterListViewHolder holder, Chapter post) {
+        if (queryText != null && !queryText.isEmpty()) {
+            holder.chapterTitleView.setText(getSpannableFromQuery(queryText, post.getTitleFormatted()));
         } else {
-            launchChapterFragment(clicked, holder);
+            holder.chapterTitleView.setText(post.getTitleFormatted());
         }
     }
 
+    private void handleClick(ChapterListViewHolder holder) {
+        Chapter clicked = posts.get(holder.getAdapterPosition());
+        launchChapterFragment(clicked, holder);
+
+    }
+
+    /**
+     * Highlighting text entered to search view
+     * @param queryText text entered to searchview
+     * @param originalText chapter title
+     * @return highlighted text if possible
+     */
     private CharSequence getSpannableFromQuery(String queryText, String originalText) {
         int startPos = originalText.toLowerCase().indexOf(queryText.toLowerCase());
         int endPos = startPos + queryText.length();
@@ -154,9 +136,8 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         return posts.size();
     }
 
-    private void launchChapterFragment(Chapter chapter, ViewHolder holder) {
+    private void launchChapterFragment(Chapter chapter, ChapterListViewHolder holder) {
         PreferencesManager manager = PreferencesManager.getInstance(context);
-        logOpeningChapter(chapter);
         manager.setLastChapter(chapter);
         if (!preferencesManager.isInOldChapters(chapter.getId())) {
             manager.addToOldChapters(chapter.getId());
@@ -181,13 +162,5 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 .replace(R.id.content_main, chapterFragment, MainActivity.TAG_FRAGMENT_TO_RETAIN)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    private void logOpeningChapter(Chapter chapter) {
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, chapter.getId());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, chapter.getTitle());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, context.getString(R.string.chapter));
-        FirebaseAnalytics.getInstance(context).logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 }

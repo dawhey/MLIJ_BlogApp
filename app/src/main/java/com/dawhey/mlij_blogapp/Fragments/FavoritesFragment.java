@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.dawhey.mlij_blogapp.Activities.MainActivity;
 import com.dawhey.mlij_blogapp.Adapters.ChapterListAdapter;
+import com.dawhey.mlij_blogapp.Adapters.ChapterListViewHolder;
 import com.dawhey.mlij_blogapp.Managers.PreferencesManager;
 import com.dawhey.mlij_blogapp.Models.Chapter;
 import com.dawhey.mlij_blogapp.R;
@@ -56,7 +57,7 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 queuedToDelete = favorites.get(viewHolder.getAdapterPosition());
-                Snackbar snackbar = initializeRemoveSnackbar((ChapterListAdapter.ViewHolder) viewHolder, root);
+                Snackbar snackbar = initializeRemoveSnackbar((ChapterListViewHolder) viewHolder, root);
                 snackbar.show();
             }
         };
@@ -92,7 +93,7 @@ public class FavoritesFragment extends Fragment {
         noFavsView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.scale_up));
     }
 
-    private Snackbar initializeRemoveSnackbar(final ChapterListAdapter.ViewHolder vh, final View root) {
+    private Snackbar initializeRemoveSnackbar(final ChapterListViewHolder vh, final View root) {
         final boolean[] delete = {true};
         String message = getString(R.string.Removed) + vh.chapterNumberView.getText() + getString(R.string.from_favorites);
         snackbar = Snackbar.make(root, message, Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
